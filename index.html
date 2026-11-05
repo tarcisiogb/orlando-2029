@@ -188,7 +188,7 @@ nav.abas .ic{display:block;font-size:20px;line-height:1.2}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
 <script>
 /* ================= CONFIGURAÇÃO ================= */
-var BUILD = "2026-11-05j";
+var BUILD = "2026-11-05k";
 var FIREBASE_CONFIG = {
   apiKey: "AIzaSyBT5_QhfJwfFpKUbw9e3O7-mtqAl1zicCg",
   authDomain: "orlando-2029.firebaseapp.com",
@@ -208,14 +208,14 @@ var MILHAS_POR_PASSAGEM = 120000;
 /* Metas estimadas em dólares, com 12% de folga. Hotel: French Quarter ou Beach Club + Cabana Bay. */
 function pacotes(e,i,l,d9,d7){return [{id:"econ",nome:"Econômica",usd:e},{id:"inter",nome:"Intermediária",usd:i},{id:"luxo",nome:"Deluxe",usd:l},{id:"disney9",nome:"Só Disney, 9 noites",usd:d9},{id:"disney7",nome:"Só Disney, 7 noites",usd:d7}]}
 var NUCLEOS = [
-  {id:"tarcisio", nome:"Tarcísio e Aline", sub:"com Lucas e Clara", pessoas:["Tarcísio","Aline","Lucas","Clara"], planos:pacotes(19000,24200,28000,15000,13100)},
-  {id:"beth", nome:"Beth", sub:"inclui quarto com Lucas e carrinho", pessoas:["Beth"], planos:pacotes(7700,10200,13900,5800,4900)},
-  {id:"paulo", nome:"Paulo e Marisia", sub:"", pessoas:["Paulo","Marisia"], planos:pacotes(11100,14500,18200,8600,7400)},
-  {id:"geraldo", nome:"Bruna e Geraldo", sub:"", pessoas:["Bruna","Geraldo"], planos:pacotes(11100,14500,18200,8600,7400)}
+  {id:"tarcisio", nome:"Tarcísio e Aline", sub:"com Lucas e Clara", pessoas:["Tarcísio","Aline","Lucas","Clara"], planos:pacotes(18400,21700,25500,14400,12400)},
+  {id:"beth", nome:"Beth", sub:"inclui quarto com Lucas e carrinho", pessoas:["Beth"], planos:pacotes(7500,9600,13300,5600,4700)},
+  {id:"paulo", nome:"Paulo e Marisia", sub:"", pessoas:["Paulo","Marisia"], planos:pacotes(10800,13200,17000,8300,7100)},
+  {id:"geraldo", nome:"Bruna e Geraldo", sub:"", pessoas:["Bruna","Geraldo"], planos:pacotes(10800,13200,17000,8300,7100)}
 ];
 
 /* Composição das metas, em dólares a preços atuais. A folga é a diferença até a meta. */
-var POR_PESSOA = {pass:850,transp:144,disney:630,univ:360,sea:99,filas:200,comida:1170,seguro:100,doc:233,compras:556};
+var POR_PESSOA = {pass:850,transp:144,disney:630,univ:360,sea:99,filas:200,comida:1170,seguro:100,doc:233,compras:0};
 var HOTEL = {econ:{hd:1980,hu:840},inter:{hd:3410,hu:840},luxo:{hd:6750,hu:840}};
 var SO_DISNEY = {
   disney9:{hd:1980,nHd:"Hotel em Disney Springs, 9 noites",transp:100,disney:630,filas:200,comida:600,seguro:100,dias:10,dCarr:5},
@@ -223,10 +223,10 @@ var SO_DISNEY = {
 };
 function valoresComp(n,pid){
   var q=n.pessoas.length,P=POR_PESSOA,b=n.id==="beth",d=SO_DISNEY[pid];
-  if(d)return {pass:P.pass*q,transp:d.transp*q,hd:d.hd,nHd:d.nHd,hu:0,disney:d.disney*q,univ:0,sea:0,filas:d.filas*q,comida:d.comida*q,seguro:d.seguro*q,doc:P.doc*q,compras:150*q,carrinho:b?d.dCarr*65:0,dCarr:d.dCarr,dias:d.dias};
+  if(d)return {pass:P.pass*q,transp:d.transp*q,hd:d.hd,nHd:d.nHd,hu:0,disney:d.disney*q,univ:0,sea:0,filas:d.filas*q,comida:d.comida*q,seguro:d.seguro*q,doc:P.doc*q,compras:0,carrinho:b?d.dCarr*65:0,dCarr:d.dCarr,dias:d.dias};
   var h=HOTEL[HOTEL[pid]?pid:"inter"],ec=pid==="econ";
   return {pass:P.pass*q,transp:P.transp*q,hd:h.hd,nHd:pid==="luxo"?"Beach Club, 9 noites":(ec?"Hotel em Disney Springs, 9 noites":"French Quarter, 9 noites"),hu:h.hu,nHu:"Cabana Bay, 3 noites",
-    disney:P.disney*q,univ:P.univ*q,sea:P.sea*q,filas:P.filas*q,comida:(ec?780:P.comida)*q,seguro:P.seguro*q,doc:P.doc*q,compras:(ec?150:P.compras)*q,carrinho:b?520:0,dCarr:8,dias:13};
+    disney:P.disney*q,univ:P.univ*q,sea:P.sea*q,filas:P.filas*q,comida:(ec?780:P.comida)*q,seguro:P.seguro*q,doc:P.doc*q,compras:0,carrinho:b?520:0,dCarr:8,dias:13};
 }
 function gruposComp(n,pid){
   var c=valoresComp(n,pid),q=n.pessoas.length,pes=q===1?"1 pessoa":q+" pessoas";
@@ -234,26 +234,27 @@ function gruposComp(n,pid){
     {t:"Passagens",i:[{n:"Ida e volta, "+pes,v:c.pass}]},
     {t:"Hospedagem",i:[{n:c.nHd,v:c.hd},{n:c.nHu,v:c.hu}]},
     {t:"Ingressos",i:[{n:"Parques da Disney",v:c.disney},{n:"Universal, Islands e Epic",v:c.univ},{n:"SeaWorld",v:c.sea}]},
-    {t:"Nos parques",i:[{n:"Filas pagas",v:c.filas},{n:"Carrinho elétrico, "+(c.dCarr||8)+" dias",v:c.carrinho||0}]},
-    {t:"Alimentação",i:[{n:(c.dias||13)+" dias, "+pes,v:c.comida}]},
+    {t:c.carrinho?"Filas pagas e carrinho":"Filas pagas",i:[{n:"Filas pagas",v:c.filas},{n:"Carrinho elétrico, "+(c.dCarr||8)+" dias",v:c.carrinho||0}]},
+    {t:"Alimentação, "+(c.dias||13)+" dias",i:[{n:(c.dias||13)+" dias, "+pes,v:c.comida}]},
     {t:"Transporte em Orlando",i:[{n:"Carros de aplicativo",v:c.transp}]},
-    {t:"Documentos e seguro",i:[{n:"Visto e passaporte",v:c.doc},{n:"Seguro-viagem",v:c.seguro}]},
-    {t:"Compras e lembranças",i:[{n:"Valor de referência",v:c.compras}]}
+    {t:"Documentos e seguro",i:[{n:"Visto e passaporte",v:c.doc},{n:"Seguro-viagem",v:c.seguro}]}
   ],r=[],a,b,s;
   for(a=0;a<g.length;a++){s=0;var it=[];for(b=0;b<g[a].i.length;b++)if(g[a].i[b].v>0){it.push(g[a].i[b]);s+=g[a].i[b].v}if(s>0)r.push({t:g[a].t,i:it,s:s})}
   return r;
 }
 function htmlComp(n,pid){
-  var ref=pid==="custom",id=ref?"inter":pid,g=gruposComp(n,id),meta=plano(n,id).usd,sub=0,i,j;
+  var ref=pid==="custom",id=ref?"inter":pid,g=gruposComp(n,id),meta=plano(n,id).usd,sub=0,i,j,q=n.pessoas.length;
   for(i=0;i<g.length;i++)sub+=g[i].s;
-  var h='<table class="tabela comp"><thead><tr><th scope="col">Item</th><th scope="col">US$</th><th scope="col">%</th></tr></thead><tbody>';
-  function pc(v){return Math.round(v/meta*100)+"%"}
+  function pp(v){return fmt(Math.round(v/q))}
+  var um=q===1;
+  var h='<table class="tabela comp"><thead><tr><th scope="col">Item</th>'+(um?"":'<th scope="col">Por pessoa</th>')+'<th scope="col">'+(um?"Valor":"Núcleo")+'</th></tr></thead><tbody>';
   for(i=0;i<g.length;i++){
-    h+='<tr class="grupo"><th scope="row">'+esc(g[i].t)+'</th><td>'+fmt(g[i].s)+'</td><td>'+pc(g[i].s)+'</td></tr>';
-    if(g[i].i.length>1||g[i].t==="Passagens"||g[i].t==="Alimentação")for(j=0;j<g[i].i.length;j++)h+='<tr class="sub"><td>'+esc(g[i].i[j].n)+'</td><td>'+fmt(g[i].i[j].v)+'</td><td></td></tr>';
+    h+='<tr class="grupo"><th scope="row">'+esc(g[i].t)+'</th>'+(um?"":'<td>'+pp(g[i].s)+'</td>')+'<td>'+fmt(g[i].s)+'</td></tr>';
+    if(g[i].i.length>1)for(j=0;j<g[i].i.length;j++)h+='<tr class="sub"><td>'+esc(g[i].i[j].n)+'</td>'+(um?"":'<td>'+pp(g[i].i[j].v)+'</td>')+'<td>'+fmt(g[i].i[j].v)+'</td></tr>';
   }
-  h+='<tr class="grupo"><th scope="row">Folga para aumento de preços</th><td>'+fmt(meta-sub)+'</td><td>'+pc(meta-sub)+'</td></tr>';
-  h+='<tr class="total"><th scope="row">Total'+(ref?" da Intermediária":"")+'</th><td>'+fmt(meta)+'</td><td>100%</td></tr></tbody></table>';
+  h+='<tr class="grupo"><th scope="row">Folga para aumento de preços</th>'+(um?"":'<td>'+pp(meta-sub)+'</td>')+'<td>'+fmt(meta-sub)+'</td></tr>';
+  h+='<tr class="total"><th scope="row">Total'+(ref?" da Intermediária":"")+'</th>'+(um?"":'<td>'+pp(meta)+'</td>')+'<td>'+fmt(meta)+'</td></tr></tbody></table>';
+  h+='<p class="nota">Valores em dólares'+(um?"":'. "Por pessoa" é a média: divide o total do núcleo por '+q)+'. Compras não entram na meta: cada núcleo define o próprio orçamento.</p>';
   if(ref)h+='<p class="nota">Vocês definiram outro valor. A tabela mostra a Intermediária como referência.</p>';
   if(n.id==="tarcisio")h+='<p class="nota">Inclui Lucas e Clara. O hotel daqui é o quarto de vocês com a Clara; o quarto do Lucas está na meta da Beth.</p>';
   if(n.id==="beth")h+='<p class="nota">O quarto é dividido com o Lucas e está todo nesta meta. Os demais custos do Lucas estão na meta de Tarcísio e Aline.</p>';
@@ -301,7 +302,7 @@ var COMPARA = [
 ];
 var ESCOLHAS = [
   {t:"Hotel na Disney",m:"Dá entrada 30 minutos antes nos parques, reserva antecipada das filas pagas e transporte gratuito. Fica mais fácil voltar ao hotel na pausa da tarde."},
-  {t:"Pacotes iguais para todos",m:"Todos os núcleos têm as mesmas opções, e cada um escolhe a própria meta. O quadro abaixo mostra o que muda em cada pacote."},
+  {t:"Pacotes iguais para todos",m:"Todos os núcleos têm as mesmas opções, e cada um escolhe a própria meta. Compras ficam fora da meta: cada núcleo define o próprio orçamento."},
   {t:"Cabana Bay na Universal",m:"Tem muitos quartos conjugados e transporte gratuito até os parques da Universal, além de entrada antecipada."},
   {t:"Quatro quartos",m:"Clara fica com Tarcísio e Aline, Lucas com a Beth, e cada um dos outros casais tem seu quarto. Vamos pedir quartos conjugados, que dependem de disponibilidade."},
   {t:"Dois dias de parque, um de descanso",m:"Nunca há mais de dois dias seguidos de parque. Assim, crianças e adultos chegam inteiros ao fim da viagem."},
@@ -530,8 +531,7 @@ function abaPainel(){
 var PACOTE_LINHAS=[
   {t:"Hotel na Disney, 9 noites",c:["Hotel oficial em Disney Springs","Port Orleans French Quarter","Beach Club"]},
   {t:"Como chegar aos parques",c:["Ônibus gratuito e entrada 30 min antes","Ônibus gratuito e entrada 30 min antes","A pé até Epcot e Hollywood Studios, e entrada 30 min antes"]},
-  {t:"Comida por pessoa, por dia",c:["US$ 60","US$ 90","US$ 90"]},
-  {t:"Compras por pessoa",c:["US$ 150","US$ 556","US$ 556"]}
+  {t:"Comida por pessoa, por dia",c:["US$ 60","US$ 90","US$ 90"]}
 ];
 function htmlPacotes(n,ativo){
   var nomes=[["econ","Econômica"],["inter","Intermediária"],["luxo","Deluxe"]],i,j;
@@ -545,21 +545,23 @@ function htmlPacotes(n,ativo){
   }
   if(n){
     var ie=plano(n,"inter").usd;
-    h+='<tr><th colspan="3" scope="colgroup">Meta de vocês</th></tr><tr class="tot">';
+    h+='<tr><th colspan="3" scope="colgroup">Meta do núcleo</th></tr><tr class="tot">';
     for(j=0;j<3;j++)h+='<td>'+usd(plano(n,nomes[j][0]).usd)+'</td>';
-    h+='</tr><tr><th colspan="3" scope="colgroup">Diferença para a Intermediária</th></tr><tr>';
+    h+='</tr>';
+    if(n.pessoas.length>1){h+='<tr><th colspan="3" scope="colgroup">Média por pessoa ('+n.pessoas.length+' pessoas)</th></tr><tr>';for(j=0;j<3;j++)h+='<td>'+usd(plano(n,nomes[j][0]).usd/n.pessoas.length)+'</td>';h+='</tr>'}
+    h+='<tr><th colspan="3" scope="colgroup">Diferença do núcleo para a Intermediária</th></tr><tr>';
     for(j=0;j<3;j++){var df=plano(n,nomes[j][0]).usd-ie;h+='<td>'+(df===0?"–":(df<0?"− ":"+ ")+usd(Math.abs(df)))+'</td>'}
     h+='</tr>';
   }
   h+='</tbody></table><p class="nota">As células em destaque são as que mudam em relação à Intermediária.</p>';
-  h+='<div class="ganhos"><div><h3>Na Econômica, vocês abrem mão de</h3><ul><li>Clima e estrutura de um hotel da própria Disney</li><li>Alguns restaurantes sentados, com mais refeições rápidas</li><li>Boa parte do valor para compras nos outlets</li></ul><p class="nota">Ainda a confirmar: se o hotel de Disney Springs dá a reserva antecipada das filas pagas.</p></div>';
+  h+='<div class="ganhos"><div><h3>Na Econômica, vocês abrem mão de</h3><ul><li>Clima e estrutura de um hotel da própria Disney</li><li>Restaurantes sentados: o valor pede refeições rápidas e café da manhã mais simples</li></ul><p class="nota">Ainda a confirmar: se o hotel de Disney Springs dá a reserva antecipada das filas pagas.</p></div>';
   h+='<div><h3>Na Deluxe, vocês ganham</h3><ul><li>Hotel mais sofisticado, a pé de dois parques</li><li>A Stormalong Bay, uma das melhores piscinas da Disney</li></ul></div>';
-  h+='<div><h3>Igual nos três pacotes acima</h3><ul><li>Datas e 8 dias de parque</li><li>Passagens no mesmo valor</li><li>Cabana Bay nas 3 noites da Universal</li><li>Filas pagas nos 5 dias de Disney</li><li>Carrinho da Beth, seguro e documentos</li></ul></div></div>';
+  h+='<div><h3>Igual nos três pacotes acima</h3><ul><li>Datas e 8 dias de parque</li><li>Passagens no mesmo valor</li><li>Cabana Bay nas 3 noites da Universal</li><li>Filas pagas nos 5 dias de Disney</li><li>Carrinho da Beth, seguro e documentos</li><li>Compras fora da meta: cada núcleo define o próprio orçamento</li></ul></div></div>';
   h+='<h3 class="sub-t">Opções só Disney</h3><p class="nota">Partem da Econômica e deixam de fora Universal, Islands, Epic e SeaWorld.</p>';
   h+='<table class="pacotes dois"><thead><tr><th scope="col"'+(ativo==="disney9"?' class="ativo"':"")+'>9 noites'+(ativo==="disney9"?'<small>sua meta</small>':"")+'</th><th scope="col"'+(ativo==="disney7"?' class="ativo"':"")+'>7 noites'+(ativo==="disney7"?'<small>sua meta</small>':"")+'</th></tr></thead><tbody>';
   h+='<tr><th colspan="2" scope="colgroup">Dias de parque</th></tr><tr><td>5 dias: 4 parques e volta ao Magic Kingdom</td><td>4 dias: Animal Kingdom, Magic Kingdom, Epcot e Hollywood Studios</td></tr>';
   h+='<tr><th colspan="2" scope="colgroup">Voo de volta</th></tr><tr><td>Noite de 01/05</td><td>Noite de 29/04</td></tr>';
-  if(n){h+='<tr><th colspan="2" scope="colgroup">Meta de vocês</th></tr><tr class="tot"><td>'+usd(plano(n,"disney9").usd)+'</td><td>'+usd(plano(n,"disney7").usd)+'</td></tr>'}
+  if(n){h+='<tr><th colspan="2" scope="colgroup">Meta do núcleo</th></tr><tr class="tot"><td>'+usd(plano(n,"disney9").usd)+'</td><td>'+usd(plano(n,"disney7").usd)+'</td></tr>';if(n.pessoas.length>1)h+='<tr><th colspan="2" scope="colgroup">Média por pessoa ('+n.pessoas.length+' pessoas)</th></tr><tr><td>'+usd(plano(n,"disney9").usd/n.pessoas.length)+'</td><td>'+usd(plano(n,"disney7").usd/n.pessoas.length)+'</td></tr>'}
   h+='</tbody></table><p class="nota">Quem escolher uma dessas opções volta antes do grupo, em voo separado.</p>';
   return h;
 }
@@ -603,17 +605,17 @@ function abaNucleo(){
   var meta=v.plano==="custom"||S.plano==="custom"?Number(v.metaCustom)||pl.usd:pl.usd;
   var eq=equivalente(n,v,cot),pct=clampPct(eq.total/meta*100);
   var h='<section class="bloco"><div class="resumo"><div class="nota" style="color:#CDD8EA">'+esc(n.nome)+'</div><div class="gr">'+pct+'%</div><div class="barra"><i style="width:'+pct+'%"></i></div>';
-  h+='<div class="det">'+usd(eq.total)+' de '+usd(meta)+' guardados</div></div>';
+  h+='<div class="det">'+usd(eq.total)+' de '+usd(meta)+' guardados pelo núcleo'+(n.pessoas.length>1?'<br>Média de '+usd(meta/n.pessoas.length)+' por pessoa':"")+'</div></div>';
   h+='<div class="card guia" id="guia">'+htmlGuia(n,v,meta,cot)+'</div>';
   h+='<div class="card"><h2 style="font-size:20px">Quanto vocês já guardaram</h2><p class="nota">Informe o total atual de cada item. Só quem tem o PIN de vocês vê estes valores.</p>';
   h+='<label for="f-brl">Em reais (R$)</label><input id="f-brl" inputmode="decimal" value="'+(v.brl?fmt(v.brl,2):"")+'" placeholder="0,00">';
   h+='<label for="f-usd">Em dólares (US$)</label><input id="f-usd" inputmode="decimal" value="'+(v.usd?fmt(v.usd,2):"")+'" placeholder="0,00">';
   h+=htmlFormMilhas(n,v,eq);
-  h+='<label for="f-plano">Meta de vocês</label><select id="f-plano">';
+  h+='<label for="f-plano">Meta do núcleo</label><select id="f-plano">';
   var i;for(i=0;i<n.planos.length;i++)h+='<option value="'+n.planos[i].id+'"'+((S.plano||v.plano||"inter")===n.planos[i].id?" selected":"")+'>'+esc(n.planos[i].nome)+' – '+usd(n.planos[i].usd)+'</option>';
   h+='<option value="custom"'+((S.plano||v.plano)==="custom"?" selected":"")+'>Outro valor</option></select>';
   h+='<div id="wrap-custom" style="display:'+((S.plano||v.plano)==="custom"?"block":"none")+'"><label for="f-custom">Meta em dólares</label><input id="f-custom" inputmode="numeric" value="'+(v.metaCustom?fmt(v.metaCustom):"")+'"></div>';
-  h+='<p class="nota">A meta escolhida não aparece para os outros. A Deluxe considera 9 noites no Beach Club e 3 no Cabana Bay.</p>';
+  h+='<p class="nota">Valores para o núcleo inteiro, sem compras. A meta escolhida não aparece para os outros.</p>';
   if(S.erro)h+='<div class="erro" role="alert">'+esc(S.erro)+'</div>';
   h+='<button class="btn bloco-w" data-a="salvar"'+(S.ocupado?" disabled":"")+'>'+(S.ocupado?"Salvando…":"Salvar")+'</button></div></section>';
   h+='<section class="bloco"><h2>O que muda entre os pacotes</h2><div class="card" id="pacotes">'+htmlPacotes(n,S.plano||v.plano||"inter")+'</div></section>';
@@ -708,7 +710,7 @@ function saldoBase(v){
 }
 function htmlGuia(n,v,meta,cot){
   var m=mesesAte(FIM_RESERVA),atual=equivalente(n,v,cot),base=saldoBase(S.priv||{}),bEq=equivalente(n,base,cot);
-  var h='<h2 style="font-size:20px">Quanto guardar por mês</h2>';
+  var h='<h2 style="font-size:20px">Quanto o núcleo deve guardar por mês</h2>';
   if(atual.total>=meta)return h+'<p class="alvo">Meta completa!</p><p class="nota">Vocês já chegaram ao valor da meta escolhida.</p>';
   if(m<=0)return h+'<p class="alvo">'+usd(meta-atual.total)+'</p><p class="nota">O prazo de março de 2029 chegou, e este é o valor que ainda falta.</p>';
   var alvo=Math.max(0,meta-bEq.total)/m,feito=Math.max(0,atual.total-bEq.total),restaMes=Math.max(0,alvo-feito);
