@@ -127,6 +127,18 @@ main.wrap{padding-top:22px}
 .prog-t th:first-child,.prog-t td:first-child{text-align:left;padding-left:0}
 .alerta{background:var(--ouro-claro);border-radius:10px;padding:9px 11px;font-size:14px;font-weight:700;margin:10px 0 0}
 .tabela.hist .det-prog td{border-top:0;padding:0 0 9px;text-align:left;white-space:normal;font-size:13px;font-weight:400;color:var(--suave)}
+.pacotes{width:100%;border-collapse:collapse;table-layout:fixed;font-size:14px}
+.pacotes thead th{font:800 12px var(--texto);background:var(--noite);color:#fff;padding:9px 1px;text-align:center;border-left:1px solid #fff;letter-spacing:-.01em}
+.pacotes thead th.ativo{background:var(--coral-esc)}
+.pacotes thead small{display:block;font:700 11px var(--texto)}
+.pacotes tbody th{text-align:left;font-size:13px;color:var(--suave);padding:12px 0 4px;font-weight:800}
+.pacotes td{text-align:center;vertical-align:top;padding:8px 4px;background:#F6F1E7;border-left:2px solid #fff;overflow-wrap:break-word}
+.pacotes td.dif{background:var(--ouro-claro);font-weight:800}
+.pacotes .tot td{font-weight:800}
+.ganhos{display:grid;gap:14px;margin-top:12px}
+.ganhos h3{font-size:17px}
+.ganhos ul{margin:6px 0 0;padding-left:20px}
+.ganhos li{margin-top:3px}
 .ok{color:var(--mar);font-weight:800}
 .nao{color:#98A1B0}
 .marco{display:flex;gap:12px;align-items:flex-start;width:100%;background:none;border:0;border-top:1px solid var(--linha);padding:12px 0;text-align:left}
@@ -176,7 +188,7 @@ nav.abas .ic{display:block;font-size:20px;line-height:1.2}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
 <script>
 /* ================= CONFIGURAÇÃO ================= */
-var BUILD = "2026-11-05h";
+var BUILD = "2026-11-05i";
 var FIREBASE_CONFIG = {
   apiKey: "AIzaSyBT5_QhfJwfFpKUbw9e3O7-mtqAl1zicCg",
   authDomain: "orlando-2029.firebaseapp.com",
@@ -196,19 +208,19 @@ var MILHAS_POR_PASSAGEM = 120000;
 /* Metas estimadas em dólares, com 12% de folga. Hotel: French Quarter ou Beach Club + Cabana Bay. */
 var NUCLEOS = [
   {id:"tarcisio", nome:"Tarcísio e Aline", sub:"com Lucas e Clara", pessoas:["Tarcísio","Aline","Lucas","Clara"],
-    planos:[{id:"inter",nome:"Intermediária",usd:24200},{id:"luxo",nome:"Deluxe",usd:28000}]},
+    planos:[{id:"econ",nome:"Econômica",usd:19000},{id:"inter",nome:"Intermediária",usd:24200},{id:"luxo",nome:"Deluxe",usd:28000}]},
   {id:"beth", nome:"Beth", sub:"inclui quarto com Lucas e carrinho", pessoas:["Beth"],
-    planos:[{id:"inter",nome:"Intermediária",usd:10200},{id:"luxo",nome:"Deluxe",usd:13900}]},
+    planos:[{id:"econ",nome:"Econômica",usd:7700},{id:"inter",nome:"Intermediária",usd:10200},{id:"luxo",nome:"Deluxe",usd:13900}]},
   {id:"paulo", nome:"Paulo e Marisia", sub:"", pessoas:["Paulo","Marisia"],
-    planos:[{id:"inter",nome:"Intermediária",usd:14500},{id:"luxo",nome:"Deluxe",usd:18200},
+    planos:[{id:"econ",nome:"Econômica",usd:11100},{id:"inter",nome:"Intermediária",usd:14500},{id:"luxo",nome:"Deluxe",usd:18200},
       {id:"enxuta",nome:"Completa enxuta",usd:10700},{id:"disney9",nome:"Só Disney, 9 noites",usd:8300},{id:"disney7",nome:"Só Disney, 7 noites",usd:7100}]},
   {id:"geraldo", nome:"Bruna e Geraldo", sub:"", pessoas:["Bruna","Geraldo"],
-    planos:[{id:"inter",nome:"Intermediária",usd:14500},{id:"luxo",nome:"Deluxe",usd:18200}]}
+    planos:[{id:"econ",nome:"Econômica",usd:11100},{id:"inter",nome:"Intermediária",usd:14500},{id:"luxo",nome:"Deluxe",usd:18200}]}
 ];
 
 /* Composição das metas, em dólares a preços atuais. A folga é a diferença até a meta. */
 var POR_PESSOA = {pass:850,transp:144,disney:630,univ:360,sea:99,filas:200,comida:1170,seguro:100,doc:233,compras:556};
-var HOTEL = {inter:{hd:3410,hu:840},luxo:{hd:6750,hu:840}};
+var HOTEL = {econ:{hd:1980,hu:840},inter:{hd:3410,hu:840},luxo:{hd:6750,hu:840}};
 var COMP_ESPECIAL = {
   enxuta:{pass:1300,transp:288,hd:2637,nHd:"Pop Century, 9 noites",hu:625,nHu:"Endless Summer, 3 noites",disney:1260,univ:720,sea:198,filas:0,comida:1560,seguro:200,doc:466,compras:300,dias:13},
   disney9:{pass:1300,transp:100,hd:2637,nHd:"Pop Century, 9 noites",hu:0,disney:1208,univ:0,sea:0,filas:0,comida:1200,seguro:200,doc:466,compras:300,dias:10},
@@ -217,9 +229,9 @@ var COMP_ESPECIAL = {
 function valoresComp(n,pid){
   var q=n.pessoas.length,c=COMP_ESPECIAL[pid];
   if(c)return c;
-  var h=HOTEL[pid==="luxo"?"luxo":"inter"],P=POR_PESSOA;
-  return {pass:P.pass*q,transp:P.transp*q,hd:h.hd,nHd:pid==="luxo"?"Beach Club, 9 noites":"French Quarter, 9 noites",hu:h.hu,nHu:"Cabana Bay, 3 noites",
-    disney:P.disney*q,univ:P.univ*q,sea:P.sea*q,filas:P.filas*q,comida:P.comida*q,seguro:P.seguro*q,doc:P.doc*q,compras:P.compras*q,carrinho:n.id==="beth"?520:0,dias:13};
+  var h=HOTEL[HOTEL[pid]?pid:"inter"],P=POR_PESSOA,ec=pid==="econ";
+  return {pass:P.pass*q,transp:P.transp*q,hd:h.hd,nHd:pid==="luxo"?"Beach Club, 9 noites":(ec?"Hotel em Disney Springs, 9 noites":"French Quarter, 9 noites"),hu:h.hu,nHu:"Cabana Bay, 3 noites",
+    disney:P.disney*q,univ:P.univ*q,sea:P.sea*q,filas:P.filas*q,comida:(ec?780:P.comida)*q,seguro:P.seguro*q,doc:P.doc*q,compras:(ec?150:P.compras)*q,carrinho:n.id==="beth"?520:0,dias:13};
 }
 function gruposComp(n,pid){
   var c=valoresComp(n,pid),q=n.pessoas.length,pes=q===1?"1 pessoa":q+" pessoas";
@@ -294,7 +306,7 @@ var COMPARA = [
 ];
 var ESCOLHAS = [
   {t:"Hotel na Disney",m:"Dá entrada 30 minutos antes nos parques, reserva antecipada das filas pagas e transporte gratuito. Fica mais fácil voltar ao hotel na pausa da tarde."},
-  {t:"Uma opção intermediária, com Deluxe se der",m:"A proposta é o Port Orleans French Quarter, pequeno e fácil de andar. Se o grupo conseguir juntar, a alternativa é o Beach Club, mais perto de Epcot e Hollywood Studios e com uma grande piscina."},
+  {t:"Três pacotes de hotel",m:"Cada núcleo escolhe a própria meta. O hotel da Disney e os valores de comida e compras mudam entre os pacotes, como mostra o quadro abaixo."},
   {t:"Cabana Bay na Universal",m:"Tem muitos quartos conjugados e transporte gratuito até os parques da Universal, além de entrada antecipada."},
   {t:"Quatro quartos",m:"Clara fica com Tarcísio e Aline, Lucas com a Beth, e cada um dos outros casais tem seu quarto. Vamos pedir quartos conjugados, que dependem de disponibilidade."},
   {t:"Dois dias de parque, um de descanso",m:"Nunca há mais de dois dias seguidos de parque. Assim, crianças e adultos chegam inteiros ao fim da viagem."},
@@ -408,7 +420,7 @@ function mesAtual(){var d=new Date();return d.getFullYear()+"-"+("0"+(d.getMonth
 function diasAte(d){return Math.max(0,Math.ceil((d.getTime()-Date.now())/86400000))}
 function mesesAte(d){var a=new Date();return Math.max(0,(d.getFullYear()-a.getFullYear())*12+d.getMonth()-a.getMonth()+1)} /* inclui o mês atual */
 function nucleo(id){var i;for(i=0;i<NUCLEOS.length;i++)if(NUCLEOS[i].id===id)return NUCLEOS[i];return null}
-function plano(n,id){var i;for(i=0;i<n.planos.length;i++)if(n.planos[i].id===id)return n.planos[i];return n.planos[0]}
+function plano(n,id){var i;for(i=0;i<n.planos.length;i++)if(n.planos[i].id===id)return n.planos[i];for(i=0;i<n.planos.length;i++)if(n.planos[i].id==="inter")return n.planos[i];return n.planos[0]}
 function planoDeluxe(n){return plano(n,"luxo")}
 function clampPct(x){x=Number(x);if(!isFinite(x)||x<0)return 0;return Math.min(100,Math.round(x))}
 function quando(ms){
@@ -520,6 +532,36 @@ function abaPainel(){
   h+='<div class="acoes bloco"><button class="btn claro" data-a="convidar">Convidar a família</button><button class="btn claro" data-a="sair-painel">Sair deste aparelho</button></div>';
   return h;
 }
+var PACOTE_LINHAS=[
+  {t:"Hotel na Disney, 9 noites",c:["Hotel oficial em Disney Springs","Port Orleans French Quarter","Beach Club"]},
+  {t:"Como chegar aos parques",c:["Ônibus gratuito e entrada 30 min antes","Ônibus gratuito e entrada 30 min antes","A pé até Epcot e Hollywood Studios, e entrada 30 min antes"]},
+  {t:"Comida por pessoa, por dia",c:["US$ 60","US$ 90","US$ 90"]},
+  {t:"Compras por pessoa",c:["US$ 150","US$ 556","US$ 556"]}
+];
+function htmlPacotes(n,ativo){
+  var nomes=[["econ","Econômica"],["inter","Intermediária"],["luxo","Deluxe"]],i,j;
+  var h='<table class="pacotes"><thead><tr>';
+  for(j=0;j<3;j++)h+='<th scope="col"'+(ativo===nomes[j][0]?' class="ativo"':"")+'>'+nomes[j][1]+(ativo===nomes[j][0]?'<small>sua meta</small>':"")+'</th>';
+  h+='</tr></thead><tbody>';
+  for(i=0;i<PACOTE_LINHAS.length;i++){
+    h+='<tr><th colspan="3" scope="colgroup">'+esc(PACOTE_LINHAS[i].t)+'</th></tr><tr>';
+    for(j=0;j<3;j++)h+='<td'+(PACOTE_LINHAS[i].c[j]!==PACOTE_LINHAS[i].c[1]?' class="dif"':"")+'>'+esc(PACOTE_LINHAS[i].c[j])+'</td>';
+    h+='</tr>';
+  }
+  if(n){
+    var ie=plano(n,"inter").usd;
+    h+='<tr><th colspan="3" scope="colgroup">Meta de vocês</th></tr><tr class="tot">';
+    for(j=0;j<3;j++)h+='<td>'+usd(plano(n,nomes[j][0]).usd)+'</td>';
+    h+='</tr><tr><th colspan="3" scope="colgroup">Diferença para a Intermediária</th></tr><tr>';
+    for(j=0;j<3;j++){var df=plano(n,nomes[j][0]).usd-ie;h+='<td>'+(df===0?"–":(df<0?"− ":"+ ")+usd(Math.abs(df)))+'</td>'}
+    h+='</tr>';
+  }
+  h+='</tbody></table><p class="nota">As células em destaque são as que mudam em relação à Intermediária.</p>';
+  h+='<div class="ganhos"><div><h3>Na Econômica, vocês abrem mão de</h3><ul><li>Clima e estrutura de um hotel da própria Disney</li><li>Alguns restaurantes sentados, com mais refeições rápidas</li><li>Boa parte do valor para compras nos outlets</li></ul><p class="nota">Ainda a confirmar: se o hotel de Disney Springs dá a reserva antecipada das filas pagas.</p></div>';
+  h+='<div><h3>Na Deluxe, vocês ganham</h3><ul><li>Hotel mais sofisticado, a pé de dois parques</li><li>A Stormalong Bay, uma das melhores piscinas da Disney</li></ul></div>';
+  h+='<div><h3>Igual nos três pacotes</h3><ul><li>Datas e 8 dias de parque</li><li>Passagens no mesmo valor</li><li>Cabana Bay nas 3 noites da Universal</li><li>Filas pagas nos 5 dias de Disney</li><li>Carrinho da Beth, seguro e documentos</li></ul></div></div>';
+  return h;
+}
 function itens(l){var i,h='<ul class="lista">';for(i=0;i<l.length;i++)h+='<li><b>'+esc(l[i].t)+'</b>'+esc(l[i].m)+'</li>';return h+'</ul>'}
 function abaViagem(){
   var h='<section class="bloco"><h2>O período</h2><div class="card">',i,x;
@@ -532,6 +574,7 @@ function abaViagem(){
   }
   h+='</div></section>';
   h+='<section class="bloco"><h2>Por que essas escolhas</h2><div class="card">'+itens(ESCOLHAS)+'</div></section>';
+  h+='<section class="bloco"><h2>O que muda entre os pacotes</h2><div class="card">'+htmlPacotes(null,"")+'</div></section>';
   h+='<section class="bloco"><h2>Períodos que comparamos</h2><div class="card">'+itens(COMPARA)+'</div></section>';
   h+='<section class="bloco"><h2>O que ainda pode mudar</h2><div class="card"><p style="margin:0">Os calendários e as regras de 2029 ainda não foram publicados. Quando saírem, vamos conferir eventos que fecham parques mais cedo, competições nos parques, reformas e os benefícios dos hotéis. O roteiro pode trocar dias de lugar por causa disso.</p></div></section>';
   return h;
@@ -572,6 +615,7 @@ function abaNucleo(){
   h+='<p class="nota">A meta escolhida não aparece para os outros. A Deluxe considera 9 noites no Beach Club e 3 no Cabana Bay.</p>';
   if(S.erro)h+='<div class="erro" role="alert">'+esc(S.erro)+'</div>';
   h+='<button class="btn bloco-w" data-a="salvar"'+(S.ocupado?" disabled":"")+'>'+(S.ocupado?"Salvando…":"Salvar")+'</button></div></section>';
+  h+='<section class="bloco"><h2>O que muda entre os pacotes</h2><div class="card" id="pacotes">'+htmlPacotes(n,S.plano||v.plano||"inter")+'</div></section>';
   h+='<section class="bloco"><h2>Composição da meta</h2><div class="card" id="comp">'+htmlComp(n,S.plano||v.plano||"inter")+'</div></section>';
   h+='<section class="bloco"><h2>Documentos</h2><div class="card">';
   var j,d=pub.docs||{};
@@ -724,6 +768,7 @@ function render(){
       var sp=document.getElementById("f-plano"),wc=document.getElementById("wrap-custom"),cpc=document.getElementById("comp");
       if(sp&&wc)wc.style.display=sp.value==="custom"?"block":"none";
       if(sp&&cpc&&S.sess)cpc.innerHTML=htmlComp(nucleo(S.sess.n),sp.value);
+      var pkc=document.getElementById("pacotes");if(sp&&pkc&&S.sess)pkc.innerHTML=htmlPacotes(nucleo(S.sess.n),sp.value);
       atualizarGuia();
     }
   }
@@ -837,7 +882,7 @@ function convidar(){
 }
 
 document.addEventListener("change",function(ev){
-  if(ev.target&&ev.target.id==="f-plano"){var w=document.getElementById("wrap-custom");if(w)w.style.display=ev.target.value==="custom"?"block":"none";var cp=document.getElementById("comp");if(cp&&S.sess)cp.innerHTML=htmlComp(nucleo(S.sess.n),ev.target.value);atualizarGuia()}
+  if(ev.target&&ev.target.id==="f-plano"){var w=document.getElementById("wrap-custom");if(w)w.style.display=ev.target.value==="custom"?"block":"none";var cp=document.getElementById("comp");if(cp&&S.sess)cp.innerHTML=htmlComp(nucleo(S.sess.n),ev.target.value);var pk=document.getElementById("pacotes");if(pk&&S.sess)pk.innerHTML=htmlPacotes(nucleo(S.sess.n),ev.target.value);atualizarGuia()}
 });
 document.addEventListener("input",function(ev){
   var i=ev.target&&ev.target.id;if(i==="f-brl"||i==="f-usd"||i==="f-custom"||i==="f-fator"||/^f-[pv]-/.test(i||""))atualizarGuia();
