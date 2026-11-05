@@ -188,7 +188,7 @@ nav.abas .ic{display:block;font-size:20px;line-height:1.2}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
 <script>
 /* ================= CONFIGURAÇÃO ================= */
-var BUILD = "2026-11-05i";
+var BUILD = "2026-11-05j";
 var FIREBASE_CONFIG = {
   apiKey: "AIzaSyBT5_QhfJwfFpKUbw9e3O7-mtqAl1zicCg",
   authDomain: "orlando-2029.firebaseapp.com",
@@ -206,32 +206,27 @@ var PASSAGEM_USD = 952;      /* passagem intermediária com 12% de folga */
 var MILHAS_POR_PASSAGEM = 120000;
 
 /* Metas estimadas em dólares, com 12% de folga. Hotel: French Quarter ou Beach Club + Cabana Bay. */
+function pacotes(e,i,l,d9,d7){return [{id:"econ",nome:"Econômica",usd:e},{id:"inter",nome:"Intermediária",usd:i},{id:"luxo",nome:"Deluxe",usd:l},{id:"disney9",nome:"Só Disney, 9 noites",usd:d9},{id:"disney7",nome:"Só Disney, 7 noites",usd:d7}]}
 var NUCLEOS = [
-  {id:"tarcisio", nome:"Tarcísio e Aline", sub:"com Lucas e Clara", pessoas:["Tarcísio","Aline","Lucas","Clara"],
-    planos:[{id:"econ",nome:"Econômica",usd:19000},{id:"inter",nome:"Intermediária",usd:24200},{id:"luxo",nome:"Deluxe",usd:28000}]},
-  {id:"beth", nome:"Beth", sub:"inclui quarto com Lucas e carrinho", pessoas:["Beth"],
-    planos:[{id:"econ",nome:"Econômica",usd:7700},{id:"inter",nome:"Intermediária",usd:10200},{id:"luxo",nome:"Deluxe",usd:13900}]},
-  {id:"paulo", nome:"Paulo e Marisia", sub:"", pessoas:["Paulo","Marisia"],
-    planos:[{id:"econ",nome:"Econômica",usd:11100},{id:"inter",nome:"Intermediária",usd:14500},{id:"luxo",nome:"Deluxe",usd:18200},
-      {id:"enxuta",nome:"Completa enxuta",usd:10700},{id:"disney9",nome:"Só Disney, 9 noites",usd:8300},{id:"disney7",nome:"Só Disney, 7 noites",usd:7100}]},
-  {id:"geraldo", nome:"Bruna e Geraldo", sub:"", pessoas:["Bruna","Geraldo"],
-    planos:[{id:"econ",nome:"Econômica",usd:11100},{id:"inter",nome:"Intermediária",usd:14500},{id:"luxo",nome:"Deluxe",usd:18200}]}
+  {id:"tarcisio", nome:"Tarcísio e Aline", sub:"com Lucas e Clara", pessoas:["Tarcísio","Aline","Lucas","Clara"], planos:pacotes(19000,24200,28000,15000,13100)},
+  {id:"beth", nome:"Beth", sub:"inclui quarto com Lucas e carrinho", pessoas:["Beth"], planos:pacotes(7700,10200,13900,5800,4900)},
+  {id:"paulo", nome:"Paulo e Marisia", sub:"", pessoas:["Paulo","Marisia"], planos:pacotes(11100,14500,18200,8600,7400)},
+  {id:"geraldo", nome:"Bruna e Geraldo", sub:"", pessoas:["Bruna","Geraldo"], planos:pacotes(11100,14500,18200,8600,7400)}
 ];
 
 /* Composição das metas, em dólares a preços atuais. A folga é a diferença até a meta. */
 var POR_PESSOA = {pass:850,transp:144,disney:630,univ:360,sea:99,filas:200,comida:1170,seguro:100,doc:233,compras:556};
 var HOTEL = {econ:{hd:1980,hu:840},inter:{hd:3410,hu:840},luxo:{hd:6750,hu:840}};
-var COMP_ESPECIAL = {
-  enxuta:{pass:1300,transp:288,hd:2637,nHd:"Pop Century, 9 noites",hu:625,nHu:"Endless Summer, 3 noites",disney:1260,univ:720,sea:198,filas:0,comida:1560,seguro:200,doc:466,compras:300,dias:13},
-  disney9:{pass:1300,transp:100,hd:2637,nHd:"Pop Century, 9 noites",hu:0,disney:1208,univ:0,sea:0,filas:0,comida:1200,seguro:200,doc:466,compras:300,dias:10},
-  disney7:{pass:1300,transp:82,hd:2051,nHd:"Pop Century, 7 noites",hu:0,disney:1000,univ:0,sea:0,filas:0,comida:960,seguro:180,doc:466,compras:300,dias:8}
+var SO_DISNEY = {
+  disney9:{hd:1980,nHd:"Hotel em Disney Springs, 9 noites",transp:100,disney:630,filas:200,comida:600,seguro:100,dias:10,dCarr:5},
+  disney7:{hd:1540,nHd:"Hotel em Disney Springs, 7 noites",transp:82,disney:500,filas:160,comida:480,seguro:80,dias:8,dCarr:4}
 };
 function valoresComp(n,pid){
-  var q=n.pessoas.length,c=COMP_ESPECIAL[pid];
-  if(c)return c;
-  var h=HOTEL[HOTEL[pid]?pid:"inter"],P=POR_PESSOA,ec=pid==="econ";
+  var q=n.pessoas.length,P=POR_PESSOA,b=n.id==="beth",d=SO_DISNEY[pid];
+  if(d)return {pass:P.pass*q,transp:d.transp*q,hd:d.hd,nHd:d.nHd,hu:0,disney:d.disney*q,univ:0,sea:0,filas:d.filas*q,comida:d.comida*q,seguro:d.seguro*q,doc:P.doc*q,compras:150*q,carrinho:b?d.dCarr*65:0,dCarr:d.dCarr,dias:d.dias};
+  var h=HOTEL[HOTEL[pid]?pid:"inter"],ec=pid==="econ";
   return {pass:P.pass*q,transp:P.transp*q,hd:h.hd,nHd:pid==="luxo"?"Beach Club, 9 noites":(ec?"Hotel em Disney Springs, 9 noites":"French Quarter, 9 noites"),hu:h.hu,nHu:"Cabana Bay, 3 noites",
-    disney:P.disney*q,univ:P.univ*q,sea:P.sea*q,filas:P.filas*q,comida:(ec?780:P.comida)*q,seguro:P.seguro*q,doc:P.doc*q,compras:(ec?150:P.compras)*q,carrinho:n.id==="beth"?520:0,dias:13};
+    disney:P.disney*q,univ:P.univ*q,sea:P.sea*q,filas:P.filas*q,comida:(ec?780:P.comida)*q,seguro:P.seguro*q,doc:P.doc*q,compras:(ec?150:P.compras)*q,carrinho:b?520:0,dCarr:8,dias:13};
 }
 function gruposComp(n,pid){
   var c=valoresComp(n,pid),q=n.pessoas.length,pes=q===1?"1 pessoa":q+" pessoas";
@@ -239,7 +234,7 @@ function gruposComp(n,pid){
     {t:"Passagens",i:[{n:"Ida e volta, "+pes,v:c.pass}]},
     {t:"Hospedagem",i:[{n:c.nHd,v:c.hd},{n:c.nHu,v:c.hu}]},
     {t:"Ingressos",i:[{n:"Parques da Disney",v:c.disney},{n:"Universal, Islands e Epic",v:c.univ},{n:"SeaWorld",v:c.sea}]},
-    {t:"Nos parques",i:[{n:"Filas pagas",v:c.filas},{n:"Carrinho elétrico, 8 dias",v:c.carrinho||0}]},
+    {t:"Nos parques",i:[{n:"Filas pagas",v:c.filas},{n:"Carrinho elétrico, "+(c.dCarr||8)+" dias",v:c.carrinho||0}]},
     {t:"Alimentação",i:[{n:(c.dias||13)+" dias, "+pes,v:c.comida}]},
     {t:"Transporte em Orlando",i:[{n:"Carros de aplicativo",v:c.transp}]},
     {t:"Documentos e seguro",i:[{n:"Visto e passaporte",v:c.doc},{n:"Seguro-viagem",v:c.seguro}]},
@@ -262,7 +257,7 @@ function htmlComp(n,pid){
   if(ref)h+='<p class="nota">Vocês definiram outro valor. A tabela mostra a Intermediária como referência.</p>';
   if(n.id==="tarcisio")h+='<p class="nota">Inclui Lucas e Clara. O hotel daqui é o quarto de vocês com a Clara; o quarto do Lucas está na meta da Beth.</p>';
   if(n.id==="beth")h+='<p class="nota">O quarto é dividido com o Lucas e está todo nesta meta. Os demais custos do Lucas estão na meta de Tarcísio e Aline.</p>';
-  if(COMP_ESPECIAL[id])h+='<p class="nota">Esta opção usa voo com conexão, hotel mais em conta, sem filas pagas e menos compras.</p>';
+  if(SO_DISNEY[id])h+='<p class="nota">Igual à Econômica, sem Universal, Islands, Epic e SeaWorld. Quem escolher esta opção volta antes do grupo.</p>';
   h+='<p class="nota">Estimativas a preços atuais, com crianças e adultos pelo mesmo valor. Os preços de 2029 ainda não existem.</p>';
   return h;
 }
@@ -306,7 +301,7 @@ var COMPARA = [
 ];
 var ESCOLHAS = [
   {t:"Hotel na Disney",m:"Dá entrada 30 minutos antes nos parques, reserva antecipada das filas pagas e transporte gratuito. Fica mais fácil voltar ao hotel na pausa da tarde."},
-  {t:"Três pacotes de hotel",m:"Cada núcleo escolhe a própria meta. O hotel da Disney e os valores de comida e compras mudam entre os pacotes, como mostra o quadro abaixo."},
+  {t:"Pacotes iguais para todos",m:"Todos os núcleos têm as mesmas opções, e cada um escolhe a própria meta. O quadro abaixo mostra o que muda em cada pacote."},
   {t:"Cabana Bay na Universal",m:"Tem muitos quartos conjugados e transporte gratuito até os parques da Universal, além de entrada antecipada."},
   {t:"Quatro quartos",m:"Clara fica com Tarcísio e Aline, Lucas com a Beth, e cada um dos outros casais tem seu quarto. Vamos pedir quartos conjugados, que dependem de disponibilidade."},
   {t:"Dois dias de parque, um de descanso",m:"Nunca há mais de dois dias seguidos de parque. Assim, crianças e adultos chegam inteiros ao fim da viagem."},
@@ -559,7 +554,13 @@ function htmlPacotes(n,ativo){
   h+='</tbody></table><p class="nota">As células em destaque são as que mudam em relação à Intermediária.</p>';
   h+='<div class="ganhos"><div><h3>Na Econômica, vocês abrem mão de</h3><ul><li>Clima e estrutura de um hotel da própria Disney</li><li>Alguns restaurantes sentados, com mais refeições rápidas</li><li>Boa parte do valor para compras nos outlets</li></ul><p class="nota">Ainda a confirmar: se o hotel de Disney Springs dá a reserva antecipada das filas pagas.</p></div>';
   h+='<div><h3>Na Deluxe, vocês ganham</h3><ul><li>Hotel mais sofisticado, a pé de dois parques</li><li>A Stormalong Bay, uma das melhores piscinas da Disney</li></ul></div>';
-  h+='<div><h3>Igual nos três pacotes</h3><ul><li>Datas e 8 dias de parque</li><li>Passagens no mesmo valor</li><li>Cabana Bay nas 3 noites da Universal</li><li>Filas pagas nos 5 dias de Disney</li><li>Carrinho da Beth, seguro e documentos</li></ul></div></div>';
+  h+='<div><h3>Igual nos três pacotes acima</h3><ul><li>Datas e 8 dias de parque</li><li>Passagens no mesmo valor</li><li>Cabana Bay nas 3 noites da Universal</li><li>Filas pagas nos 5 dias de Disney</li><li>Carrinho da Beth, seguro e documentos</li></ul></div></div>';
+  h+='<h3 class="sub-t">Opções só Disney</h3><p class="nota">Partem da Econômica e deixam de fora Universal, Islands, Epic e SeaWorld.</p>';
+  h+='<table class="pacotes dois"><thead><tr><th scope="col"'+(ativo==="disney9"?' class="ativo"':"")+'>9 noites'+(ativo==="disney9"?'<small>sua meta</small>':"")+'</th><th scope="col"'+(ativo==="disney7"?' class="ativo"':"")+'>7 noites'+(ativo==="disney7"?'<small>sua meta</small>':"")+'</th></tr></thead><tbody>';
+  h+='<tr><th colspan="2" scope="colgroup">Dias de parque</th></tr><tr><td>5 dias: 4 parques e volta ao Magic Kingdom</td><td>4 dias: Animal Kingdom, Magic Kingdom, Epcot e Hollywood Studios</td></tr>';
+  h+='<tr><th colspan="2" scope="colgroup">Voo de volta</th></tr><tr><td>Noite de 01/05</td><td>Noite de 29/04</td></tr>';
+  if(n){h+='<tr><th colspan="2" scope="colgroup">Meta de vocês</th></tr><tr class="tot"><td>'+usd(plano(n,"disney9").usd)+'</td><td>'+usd(plano(n,"disney7").usd)+'</td></tr>'}
+  h+='</tbody></table><p class="nota">Quem escolher uma dessas opções volta antes do grupo, em voo separado.</p>';
   return h;
 }
 function itens(l){var i,h='<ul class="lista">';for(i=0;i<l.length;i++)h+='<li><b>'+esc(l[i].t)+'</b>'+esc(l[i].m)+'</li>';return h+'</ul>'}
@@ -823,7 +824,7 @@ function abrir(){
 }
 function abrirNucleo(id,k){
   S.sess={n:id,k:k};S.plano=null;
-  return Store.lerPriv(k).then(function(v){S.priv=v||{};S.plano=S.priv.plano||null;S.fNucleo=null;S.erro="";salvarSessao();render()})
+  return Store.lerPriv(k).then(function(v){S.priv=v||{};if(S.priv.plano==="enxuta")S.priv.plano="econ";S.plano=S.priv.plano||null;S.fNucleo=null;S.erro="";salvarSessao();render()})
     .catch(function(e){S.sess=null;S.erro=erroRede(e);render()});
 }
 function tratarPin(){
