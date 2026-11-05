@@ -1,0 +1,803 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#12264A">
+<meta name="robots" content="noindex,nofollow">
+<title>Rumo a Orlando</title>
+<meta name="description" content="Painel da família para acompanhar os preparativos da viagem.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Rumo a Orlando">
+<meta property="og:description" content="Os preparativos da nossa viagem em família.">
+<meta property="og:url" content="https://tarcisiogb.github.io/orlando-2029/">
+<meta property="og:image" content="https://tarcisiogb.github.io/orlando-2029/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="32x32" href="icone-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icone-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Orlando 2029">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --noite:#12264A; --noite2:#1D3866; --coral:#E8552D; --coral-esc:#B93C18; --ouro:#F4B740; --ouro-claro:#FFF0C9;
+  --papel:#FFF8EE; --branco:#FFFFFF; --tinta:#1B2433; --suave:#5B6678; --linha:#E8DFD0; --mar:#0B7A6F; --mar-claro:#DDF3EF;
+  --erro:#B3261E; --sombra:0 8px 24px rgba(18,38,74,.10);
+  --titulo:"Bricolage Grotesque",Georgia,serif; --texto:"Nunito Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.45 var(--texto);padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+body.sem-nav{padding-bottom:0}
+h1,h2,h3{font-family:var(--titulo);line-height:1.1;margin:0}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--ouro);outline-offset:2px}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+.demo{background:var(--ouro);color:var(--noite);font-weight:800;font-size:14px;text-align:center;padding:7px 12px}
+header.topo{background:var(--noite);color:#fff;padding:22px 0 26px}
+.topo .sup{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ouro)}
+.topo h1{font-size:36px;font-weight:800;margin-top:4px}
+.topo .linha{display:flex;gap:10px;margin-top:18px}
+.num{flex:1;background:var(--noite2);border-radius:14px;padding:11px 12px;min-width:0}
+.num b{display:block;font:800 25px/1.1 var(--titulo)}
+.num span{font-size:13px;color:#CDD8EA}
+main.wrap{padding-top:22px}
+.bloco{margin-bottom:24px}
+.bloco>h2{font-size:22px;margin-bottom:11px}
+.nota{font-size:14px;color:var(--suave)}
+.card{background:var(--branco);border:1px solid var(--linha);border-radius:18px;box-shadow:var(--sombra);padding:16px}
+.rota{display:flex;flex-direction:column;gap:17px}
+.rota-item .cab{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-weight:800}
+.rota-item .cab b{font:800 19px var(--titulo);color:var(--coral-esc)}
+.trilho{position:relative;height:30px;margin:4px 14px 0}
+.trilho:before{content:"";position:absolute;left:-14px;right:-14px;top:14px;border-top:3px dashed #CFD6E2}
+.feito{position:absolute;left:-14px;top:13px;height:5px;background:var(--coral);border-radius:3px}
+.aviao{position:absolute;top:2px;width:28px;height:28px;margin-left:-14px;color:var(--noite)}
+.pontos{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--suave);margin-top:9px}
+.passes{display:grid;gap:12px}
+.passe{background:var(--branco);border:1px solid var(--linha);border-radius:18px;box-shadow:var(--sombra);overflow:hidden}
+.passe .alto{display:flex;justify-content:space-between;gap:10px;background:var(--noite);color:#fff;padding:11px 14px}
+.passe .alto strong{font:800 17px var(--titulo)}
+.passe .alto span{white-space:nowrap;font-weight:800;color:var(--ouro)}
+.passe .corpo{padding:12px 14px}
+.medalhas{display:flex;flex-wrap:wrap;gap:6px}
+.medalha{display:inline-flex;align-items:center;gap:5px;background:var(--ouro-claro);border-radius:99px;padding:4px 10px;font-size:13px;font-weight:700}
+.vazio{font-size:14px;color:var(--suave)}
+.feed{list-style:none;margin:0;padding:0}
+.feed li{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--linha)}
+.feed li:last-child{border:0}
+.feed .quando{margin-left:auto;font-size:13px;color:var(--suave);white-space:nowrap}
+.tabela{width:100%;border-collapse:collapse;font-size:15px}
+.tabela th{font-size:13px;color:var(--suave);text-align:center;padding:6px 4px}
+.tabela th:first-child{text-align:left}
+.tabela td{padding:10px 4px;border-top:1px solid var(--linha);text-align:center}
+.tabela td:first-child{text-align:left;font-weight:700}
+.tabela.hist{font-size:14px}
+.tabela.hist th,.tabela.hist td{text-align:right;white-space:nowrap;padding-left:6px;padding-right:0}
+.tabela.hist th:first-child,.tabela.hist td:first-child{text-align:left;padding-left:0}
+.dia{display:grid;grid-template-columns:62px 1fr;gap:12px;padding:13px 0;border-top:1px solid var(--linha)}
+.dia:first-child{border-top:0;padding-top:0}
+.dia:last-child{padding-bottom:0}
+.dia .data{font-weight:800;line-height:1.2}
+.dia .data small{display:block;font-size:13px;font-weight:700;color:var(--suave)}
+.dia .prog{font-weight:800}
+.dia p{margin:3px 0 0;font-size:15px;color:var(--suave)}
+.tag{display:inline-block;font-size:12px;font-weight:800;border-radius:99px;padding:2px 9px;margin-top:6px}
+.tag.parque{background:#FBE3DB;color:#8E2D10}
+.tag.descanso{background:var(--mar-claro);color:#075A52}
+.tag.voo{background:#E3E9F4;color:var(--noite)}
+.fato{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-top:1px solid var(--linha)}
+.fato:first-child{border-top:0;padding-top:0}
+.fato:last-child{padding-bottom:0}
+.fato span{color:var(--suave)}
+.fato b{text-align:right}
+.lista{margin:0;padding:0;list-style:none}
+.lista li{padding:11px 0;border-top:1px solid var(--linha)}
+.lista li:first-child{border-top:0;padding-top:0}
+.lista li:last-child{padding-bottom:0}
+.lista b{display:block}
+.tabela.comp th,.tabela.comp td{text-align:right;padding:8px 0 8px 10px}
+.tabela.comp th:first-child,.tabela.comp td:first-child{text-align:left;padding-left:0;white-space:normal}
+.tabela.comp tbody th{font-size:15px;font-weight:800;color:var(--tinta)}
+.tabela.comp .grupo td{font-weight:800}
+.tabela.comp .sub td{border-top:0;padding-top:0;font-weight:400;font-size:14px;color:var(--suave)}
+.tabela.comp .sub td:first-child{font-weight:400;padding-left:10px}
+.tabela.comp .total th,.tabela.comp .total td{border-top:2px solid var(--noite);font-size:17px;font-weight:800;color:var(--tinta)}
+.guia{margin-bottom:14px}
+.guia .alvo{font:800 34px/1.1 var(--titulo);color:var(--coral-esc);margin:10px 0 4px}
+.guia .alvo small{font:700 16px var(--texto);color:var(--suave)}
+.guia .fato:first-of-type{border-top:1px solid var(--linha);padding-top:9px;margin-top:10px}
+.guia .fato:last-of-type{padding-bottom:9px}
+.guia .alt{background:var(--mar-claro);border-radius:12px;padding:11px 12px;font-size:15px;margin:10px 0}
+.ok{color:var(--mar);font-weight:800}
+.nao{color:#98A1B0}
+.marco{display:flex;gap:12px;align-items:flex-start;width:100%;background:none;border:0;border-top:1px solid var(--linha);padding:12px 0;text-align:left}
+.marco:first-child{border-top:0}
+.caixa{flex:none;width:26px;height:26px;border:2px solid #A9B2C2;border-radius:8px;display:grid;place-items:center;font-weight:800;color:#fff;margin-top:1px}
+.on>.caixa,.caixa.on{background:var(--mar);border-color:var(--mar)}
+.marco small{display:block;color:var(--suave);font-size:14px}
+.marco.on span.t{text-decoration:line-through;color:var(--suave)}
+label{display:block;font-weight:800;margin:14px 0 5px}
+input[type=text],input[type=password],input[inputmode],select{width:100%;min-height:48px;background:#fff;border:1.5px solid #C9C2B5;border-radius:12px;padding:10px 12px;font-size:17px}
+.btn{display:inline-flex;justify-content:center;align-items:center;min-height:48px;border:0;border-radius:13px;background:var(--coral-esc);color:#fff;font-weight:800;padding:10px 18px}
+.btn.claro{background:transparent;color:var(--noite);border:1.5px solid var(--noite)}
+.btn.link{background:none;color:var(--coral-esc);padding:8px 0;min-height:44px;text-decoration:underline}
+.btn.bloco-w{width:100%;margin-top:16px}
+.btn:disabled{opacity:.55;cursor:default}
+.erro{color:var(--erro);font-weight:700;margin-top:10px}
+.grade2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.opc{min-height:62px;background:#fff;border:1.5px solid #C9C2B5;border-radius:14px;padding:10px;font-weight:800;text-align:left}
+.resumo{background:var(--noite);color:#fff;border-radius:18px;padding:16px;margin-bottom:14px}
+.resumo .gr{font:800 42px/1 var(--titulo);color:var(--ouro)}
+.barra{height:12px;border-radius:7px;background:#3A5381;overflow:hidden;margin:12px 0}
+.barra i{display:block;height:100%;background:var(--ouro)}
+.resumo .det{font-size:15px;color:#DCE4F1}
+.check{display:flex;align-items:center;gap:11px;width:100%;min-height:46px;background:none;border:0;padding:6px 0;text-align:left;font-weight:600}
+.pessoa{font-weight:800;margin-top:12px}
+.entrada{min-height:100vh;display:flex;align-items:center;background:var(--noite);padding:24px 0}
+.entrada .card{width:100%}
+.entrada h1{font-size:36px;font-weight:800;color:var(--noite)}
+.entrada .sup{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--coral-esc)}
+nav.abas{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--linha);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom);z-index:5}
+nav.abas button{flex:1;min-width:0;max-width:200px;min-height:62px;padding:0 2px;background:none;border:0;font-size:13px;font-weight:800;color:var(--suave);border-top:3px solid transparent}
+nav.abas button[aria-current=page]{color:var(--coral-esc);border-top-color:var(--coral-esc)}
+nav.abas .ic{display:block;font-size:20px;line-height:1.2}
+.toast{position:fixed;left:16px;right:16px;bottom:calc(76px + env(safe-area-inset-bottom));max-width:560px;margin:0 auto;background:var(--noite);color:#fff;border-radius:14px;padding:13px 15px;font-weight:700;box-shadow:var(--sombra);z-index:9}
+.rodape{text-align:center;font-size:12px;color:var(--suave);padding:6px 0 18px}
+.acoes{display:flex;gap:9px;flex-wrap:wrap}
+.confete{position:fixed;top:-20px;width:9px;height:14px;z-index:20;pointer-events:none;animation:cai 1.7s ease-in forwards}
+@keyframes cai{to{transform:translateY(105vh) rotate(540deg);opacity:.75}}
+@media (prefers-reduced-motion:reduce){.confete{display:none}}
+@media (max-width:370px){.topo h1,.entrada h1{font-size:31px}.num b{font-size:21px}nav.abas button{font-size:12px}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script>
+/* ================= CONFIGURAÇÃO ================= */
+var BUILD = "2026-11-05g";
+var FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBT5_QhfJwfFpKUbw9e3O7-mtqAl1zicCg",
+  authDomain: "orlando-2029.firebaseapp.com",
+  projectId: "orlando-2029",
+  storageBucket: "orlando-2029.firebasestorage.app",
+  messagingSenderId: "785541654636",
+  appId: "1:785541654636:web:759a9c726e01c80136d049"
+};
+var DEMO = FIREBASE_CONFIG.apiKey === "COLE_AQUI";
+
+var DATA_VIAGEM = new Date(2029, 3, 21, 12, 0, 0);
+var FIM_RESERVA = new Date(2029, 2, 31, 12, 0, 0);
+var COTACAO_PADRAO = 5.5;
+var PASSAGEM_USD = 952;      /* passagem intermediária com 12% de folga */
+var MILHAS_POR_PASSAGEM = 120000;
+
+/* Metas estimadas em dólares, com 12% de folga. Hotel: French Quarter ou Beach Club + Cabana Bay. */
+var NUCLEOS = [
+  {id:"tarcisio", nome:"Tarcísio e Aline", sub:"com Lucas e Clara", pessoas:["Tarcísio","Aline","Lucas","Clara"],
+    planos:[{id:"inter",nome:"Intermediária",usd:24200},{id:"luxo",nome:"Deluxe",usd:28000}]},
+  {id:"beth", nome:"Beth", sub:"inclui quarto com Lucas e carrinho", pessoas:["Beth"],
+    planos:[{id:"inter",nome:"Intermediária",usd:10200},{id:"luxo",nome:"Deluxe",usd:13900}]},
+  {id:"paulo", nome:"Paulo e Marisia", sub:"", pessoas:["Paulo","Marisia"],
+    planos:[{id:"inter",nome:"Intermediária",usd:14500},{id:"luxo",nome:"Deluxe",usd:18200},
+      {id:"enxuta",nome:"Completa enxuta",usd:10700},{id:"disney9",nome:"Só Disney, 9 noites",usd:8300},{id:"disney7",nome:"Só Disney, 7 noites",usd:7100}]},
+  {id:"geraldo", nome:"Bruna e Geraldo", sub:"", pessoas:["Bruna","Geraldo"],
+    planos:[{id:"inter",nome:"Intermediária",usd:14500},{id:"luxo",nome:"Deluxe",usd:18200}]}
+];
+
+/* Composição das metas, em dólares a preços atuais. A folga é a diferença até a meta. */
+var POR_PESSOA = {pass:850,transp:144,disney:630,univ:360,sea:99,filas:200,comida:1170,seguro:100,doc:233,compras:556};
+var HOTEL = {inter:{hd:3410,hu:840},luxo:{hd:6750,hu:840}};
+var COMP_ESPECIAL = {
+  enxuta:{pass:1300,transp:288,hd:2637,nHd:"Pop Century, 9 noites",hu:625,nHu:"Endless Summer, 3 noites",disney:1260,univ:720,sea:198,filas:0,comida:1560,seguro:200,doc:466,compras:300,dias:13},
+  disney9:{pass:1300,transp:100,hd:2637,nHd:"Pop Century, 9 noites",hu:0,disney:1208,univ:0,sea:0,filas:0,comida:1200,seguro:200,doc:466,compras:300,dias:10},
+  disney7:{pass:1300,transp:82,hd:2051,nHd:"Pop Century, 7 noites",hu:0,disney:1000,univ:0,sea:0,filas:0,comida:960,seguro:180,doc:466,compras:300,dias:8}
+};
+function valoresComp(n,pid){
+  var q=n.pessoas.length,c=COMP_ESPECIAL[pid];
+  if(c)return c;
+  var h=HOTEL[pid==="luxo"?"luxo":"inter"],P=POR_PESSOA;
+  return {pass:P.pass*q,transp:P.transp*q,hd:h.hd,nHd:pid==="luxo"?"Beach Club, 9 noites":"French Quarter, 9 noites",hu:h.hu,nHu:"Cabana Bay, 3 noites",
+    disney:P.disney*q,univ:P.univ*q,sea:P.sea*q,filas:P.filas*q,comida:P.comida*q,seguro:P.seguro*q,doc:P.doc*q,compras:P.compras*q,carrinho:n.id==="beth"?520:0,dias:13};
+}
+function gruposComp(n,pid){
+  var c=valoresComp(n,pid),q=n.pessoas.length,pes=q===1?"1 pessoa":q+" pessoas";
+  var g=[
+    {t:"Passagens",i:[{n:"Ida e volta, "+pes,v:c.pass}]},
+    {t:"Hospedagem",i:[{n:c.nHd,v:c.hd},{n:c.nHu,v:c.hu}]},
+    {t:"Ingressos",i:[{n:"Parques da Disney",v:c.disney},{n:"Universal, Islands e Epic",v:c.univ},{n:"SeaWorld",v:c.sea}]},
+    {t:"Nos parques",i:[{n:"Filas pagas",v:c.filas},{n:"Carrinho elétrico, 8 dias",v:c.carrinho||0}]},
+    {t:"Alimentação",i:[{n:(c.dias||13)+" dias, "+pes,v:c.comida}]},
+    {t:"Transporte em Orlando",i:[{n:"Carros de aplicativo",v:c.transp}]},
+    {t:"Documentos e seguro",i:[{n:"Visto e passaporte",v:c.doc},{n:"Seguro-viagem",v:c.seguro}]},
+    {t:"Compras e lembranças",i:[{n:"Valor de referência",v:c.compras}]}
+  ],r=[],a,b,s;
+  for(a=0;a<g.length;a++){s=0;var it=[];for(b=0;b<g[a].i.length;b++)if(g[a].i[b].v>0){it.push(g[a].i[b]);s+=g[a].i[b].v}if(s>0)r.push({t:g[a].t,i:it,s:s})}
+  return r;
+}
+function htmlComp(n,pid){
+  var ref=pid==="custom",id=ref?"inter":pid,g=gruposComp(n,id),meta=plano(n,id).usd,sub=0,i,j;
+  for(i=0;i<g.length;i++)sub+=g[i].s;
+  var h='<table class="tabela comp"><thead><tr><th scope="col">Item</th><th scope="col">US$</th><th scope="col">%</th></tr></thead><tbody>';
+  function pc(v){return Math.round(v/meta*100)+"%"}
+  for(i=0;i<g.length;i++){
+    h+='<tr class="grupo"><th scope="row">'+esc(g[i].t)+'</th><td>'+fmt(g[i].s)+'</td><td>'+pc(g[i].s)+'</td></tr>';
+    if(g[i].i.length>1||g[i].t==="Passagens"||g[i].t==="Alimentação")for(j=0;j<g[i].i.length;j++)h+='<tr class="sub"><td>'+esc(g[i].i[j].n)+'</td><td>'+fmt(g[i].i[j].v)+'</td><td></td></tr>';
+  }
+  h+='<tr class="grupo"><th scope="row">Folga para aumento de preços</th><td>'+fmt(meta-sub)+'</td><td>'+pc(meta-sub)+'</td></tr>';
+  h+='<tr class="total"><th scope="row">Total'+(ref?" da Intermediária":"")+'</th><td>'+fmt(meta)+'</td><td>100%</td></tr></tbody></table>';
+  if(ref)h+='<p class="nota">Vocês definiram outro valor. A tabela mostra a Intermediária como referência.</p>';
+  if(n.id==="tarcisio")h+='<p class="nota">Inclui Lucas e Clara. O hotel daqui é o quarto de vocês com a Clara; o quarto do Lucas está na meta da Beth.</p>';
+  if(n.id==="beth")h+='<p class="nota">O quarto é dividido com o Lucas e está todo nesta meta. Os demais custos do Lucas estão na meta de Tarcísio e Aline.</p>';
+  if(COMP_ESPECIAL[id])h+='<p class="nota">Esta opção usa voo com conexão, hotel mais em conta, sem filas pagas e menos compras.</p>';
+  h+='<p class="nota">Estimativas a preços atuais, com crianças e adultos pelo mesmo valor. Os preços de 2029 ainda não existem.</p>';
+  return h;
+}
+
+var MEDALHAS = {
+  inicio:{e:"🌱",n:"Primeiro passo"}, p10:{e:"🎟️",n:"10% da meta"}, p25:{e:"🧳",n:"25% da meta"}, p50:{e:"✈️",n:"Metade do caminho"},
+  p75:{e:"🌴",n:"75% da meta"}, p100:{e:"🏆",n:"Meta completa"}, deluxe:{e:"⭐",n:"Meta Deluxe"}, milhas:{e:"🛫",n:"Juntando milhas"},
+  passaporte:{e:"📘",n:"Passaportes prontos"}, visto:{e:"📗",n:"Vistos prontos"}, m3:{e:"🔥",n:"3 meses seguidos"}, m6:{e:"🔥",n:"6 meses seguidos"}, m12:{e:"💎",n:"12 meses seguidos"}
+};
+var ORDEM_MED = ["inicio","p10","p25","p50","p75","p100","deluxe","milhas","passaporte","visto","m3","m6","m12"];
+
+var ROTEIRO = [
+  {d:"21/04",s:"sáb",t:"voo",r:"Viagem",p:"Voo noturno saindo de São Paulo",m:"Todos dormem no voo e chegam com o dia pela frente."},
+  {d:"22/04",s:"dom",t:"descanso",r:"Chegada",p:"Chegada e instalação no hotel da Disney",m:"Sem parque no primeiro dia, para descansar do voo."},
+  {d:"23/04",s:"seg",t:"parque",r:"Parque",p:"Animal Kingdom",m:"Parque com ritmo mais tranquilo para começar a viagem."},
+  {d:"24/04",s:"ter",t:"parque",r:"Parque",p:"Magic Kingdom",m:"Aniversário do Tarcísio no parque mais marcante da viagem."},
+  {d:"25/04",s:"qua",t:"descanso",r:"Descanso",p:"Hotel e compras no outlet",m:"Pausa depois de dois dias seguidos de parque."},
+  {d:"26/04",s:"qui",t:"parque",r:"Parque",p:"Epcot",m:"Boa variedade para todas as idades, com pavilhões e passeios."},
+  {d:"27/04",s:"sex",t:"parque",r:"Parque",p:"Hollywood Studios",m:"Completa os quatro parques da Disney na primeira semana."},
+  {d:"28/04",s:"sáb",t:"descanso",r:"Descanso",p:"Hotel e Disney Springs",m:"Dia leve, com transporte gratuito da Disney."},
+  {d:"29/04",s:"dom",t:"parque",r:"Parque",p:"SeaWorld",m:"Fica fora da Disney, então o grupo vai de carro de aplicativo."},
+  {d:"30/04",s:"seg",t:"parque",r:"Parque",p:"Magic Kingdom de novo",m:"Segunda visita para repetir os favoritos e ver o que faltou."},
+  {d:"01/05",s:"ter",t:"descanso",r:"Descanso",p:"Mudança para o Cabana Bay e compras",m:"Dia livre para trocar de hotel sem perder dia de parque."},
+  {d:"02/05",s:"qua",t:"parque",r:"Parque",p:"Universal Studios e Islands of Adventure",m:"Dia mais puxado, com dois parques: cada um pode ajustar o ritmo."},
+  {d:"03/05",s:"qui",t:"parque",r:"Parque",p:"Epic Universe",m:"Dia inteiro dedicado ao parque mais novo."},
+  {d:"04/05",s:"sex",t:"voo",r:"Viagem",p:"Últimas compras e voo noturno",m:"As malas ficam no hotel até a hora de ir para o aeroporto."},
+  {d:"05/05",s:"sáb",t:"voo",r:"Viagem",p:"Chegada em São Paulo",m:"Volta no fim de semana, antes de retomar a rotina."}
+];
+var MOTIVOS = [
+  {t:"Clima agradável",m:"Abril costuma ter o clima mais previsível da primavera, com cerca de 29 °C de dia e 17 °C à noite. Dá para aproveitar a piscina e passar o dia no parque sem o frio do inverno."},
+  {t:"Parques menos cheios",m:"A Páscoa de 2029 será em 1º de abril. Saindo em 21 de abril, evitamos o movimento forte do feriado."},
+  {t:"Sem feriados americanos",m:"Nenhum feriado nacional dos Estados Unidos cai nessas datas."},
+  {t:"Sem Halloween",m:"A viagem fica longe da época de Halloween nos parques."},
+  {t:"Uma data especial",m:"O aniversário do Tarcísio, em 24 de abril, acontece durante a viagem."}
+];
+var COMPARA = [
+  {t:"Fim de outubro e início de novembro",m:"Coincide com o Halloween e com um período mais cheio, e tem feriado americano."},
+  {t:"Fevereiro",m:"Costuma ser mais vazio e barato, mas as manhãs são frias e os parques fecham mais cedo."},
+  {t:"Julho",m:"Férias nos Estados Unidos: é uma das épocas mais lotadas e muito quentes."},
+  {t:"Setembro",m:"Costuma ser vazio, mas é calor forte e o auge da temporada de furacões."}
+];
+var ESCOLHAS = [
+  {t:"Hotel na Disney",m:"Dá entrada 30 minutos antes nos parques, reserva antecipada das filas pagas e transporte gratuito. Fica mais fácil voltar ao hotel na pausa da tarde."},
+  {t:"Uma opção intermediária, com Deluxe se der",m:"A proposta é o Port Orleans French Quarter, pequeno e fácil de andar. Se o grupo conseguir juntar, a alternativa é o Beach Club, mais perto de Epcot e Hollywood Studios e com uma grande piscina."},
+  {t:"Cabana Bay na Universal",m:"Tem muitos quartos conjugados e transporte gratuito até os parques da Universal, além de entrada antecipada."},
+  {t:"Quatro quartos",m:"Clara fica com Tarcísio e Aline, Lucas com a Beth, e cada um dos outros casais tem seu quarto. Vamos pedir quartos conjugados, que dependem de disponibilidade."},
+  {t:"Dois dias de parque, um de descanso",m:"Nunca há mais de dois dias seguidos de parque. Assim, crianças e adultos chegam inteiros ao fim da viagem."},
+  {t:"Carro de aplicativo em vez de carro alugado",m:"Dentro da Disney usamos o transporte gratuito. Nos outros trajetos, o aplicativo evita pagar carro parado e estacionamento."},
+  {t:"Carrinho elétrico para a Beth",m:"Alugado no parque, é um apoio para não ficar o dia todo em pé. Também ajuda a levar as mochilas."}
+];
+
+var MARCOS = [
+  {id:"conferir",t:"Conferir passaportes e vistos de todos",q:"Até dezembro de 2026"},
+  {id:"docs",t:"Tirar os passaportes e vistos que faltam",q:"Ao longo de 2027"},
+  {id:"milhas",t:"Definir o programa de milhas das passagens",q:"Até o fim de 2027"},
+  {id:"hotel",t:"Decidir o hotel: intermediário ou Deluxe",q:"Quando abrirem as reservas de 2029"},
+  {id:"reserva",t:"Reservar os hotéis da Disney e da Universal",q:"Quando abrirem as reservas de 2029"},
+  {id:"voos",t:"Emitir as passagens",q:"Cerca de 11 meses antes, por volta de maio de 2028"},
+  {id:"calend",t:"Conferir os calendários de parques e eventos de 2029",q:"Assim que forem publicados"},
+  {id:"ingressos",t:"Comprar os ingressos",q:"Quando abrirem as vendas para 2029"},
+  {id:"seguro",t:"Contratar o seguro-viagem",q:"Até março de 2029"},
+  {id:"restaurantes",t:"Reservar os restaurantes",q:"Cerca de 60 dias antes, em fevereiro de 2029, se a regra continuar"},
+  {id:"filas",t:"Comprar e marcar as filas pagas",q:"Cerca de 7 dias antes, se a regra continuar"}
+];
+
+/* ================= ARMAZENAMENTO ================= */
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function lsDel(k){try{localStorage.removeItem(k)}catch(e){}}
+
+function deepMerge(a,b){
+  var r={},k;
+  for(k in a){if(Object.prototype.hasOwnProperty.call(a,k))r[k]=a[k]}
+  for(k in b){
+    if(!Object.prototype.hasOwnProperty.call(b,k))continue;
+    if(b[k]&&typeof b[k]==="object"&&!Array.isArray(b[k])&&r[k]&&typeof r[k]==="object"&&!Array.isArray(r[k]))r[k]=deepMerge(r[k],b[k]);
+    else r[k]=b[k];
+  }
+  return r;
+}
+
+var demoDB={}, demoSubs=[];
+function demoSemente(){
+  var mes=[mesAtual()],t=Date.now(),d=86400000;
+  demoDB={};
+  demoDB["cfg"]={cotacao:COTACAO_PADRAO,marcos:{conferir:true},criadoEm:t};
+  demoDB["prog/beth"]={pct:12,pts:220,meses:mes,medalhas:{inicio:t-9*d,p10:t-2*d},docs:{Beth:{p:true}}};
+  demoDB["prog/paulo"]={pct:22,pts:470,meses:mes,medalhas:{inicio:t-20*d,p10:t-6*d,milhas:t-6*d},docs:{Paulo:{p:true},Marisia:{p:true}}};
+  demoDB["prog/geraldo"]={pct:31,pts:560,meses:mes,medalhas:{inicio:t-30*d,p10:t-14*d,p25:t-1*d},docs:{Bruna:{p:true,v:true}}};
+}
+function demoNotificar(){var i;for(i=0;i<demoSubs.length;i++)demoSubs[i]()}
+
+var Store={db:null,raiz:null,
+  conectar:function(chave){
+    if(DEMO){if(!demoDB.cfg)demoSemente();return Promise.resolve()}
+    if(typeof firebase==="undefined"||!firebase.initializeApp)return Promise.reject(new Error("sem-firebase"));
+    if(!firebase.apps.length)firebase.initializeApp(FIREBASE_CONFIG);
+    Store.db=firebase.firestore();
+    Store.raiz=Store.db.collection("viagens").doc(chave);
+    return Promise.resolve();
+  },
+  lerConfig:function(){
+    if(DEMO)return Promise.resolve(demoDB.cfg||null);
+    return Store.raiz.collection("config").doc("geral").get().then(function(s){return s.exists?s.data():null});
+  },
+  gravarConfig:function(o){
+    if(DEMO){demoDB.cfg=deepMerge(demoDB.cfg||{},o);demoNotificar();return Promise.resolve()}
+    return Store.raiz.collection("config").doc("geral").set(o,{merge:true});
+  },
+  gravarProg:function(n,o){
+    if(DEMO){demoDB["prog/"+n]=deepMerge(demoDB["prog/"+n]||{},o);demoNotificar();return Promise.resolve()}
+    return Store.raiz.collection("progresso").doc(n).set(o,{merge:true});
+  },
+  lerPriv:function(k){
+    if(DEMO)return Promise.resolve(demoDB["priv/"+k]||null);
+    return Store.raiz.collection("privado").doc(k).get().then(function(s){return s.exists?s.data():null});
+  },
+  gravarPriv:function(k,o){
+    if(DEMO){demoDB["priv/"+k]=o;return Promise.resolve()}
+    return Store.raiz.collection("privado").doc(k).set(o);
+  },
+  ouvir:function(cbCfg,cbProg,cbErro){
+    if(DEMO){
+      var f=function(){var p={},i;for(i=0;i<NUCLEOS.length;i++)if(demoDB["prog/"+NUCLEOS[i].id])p[NUCLEOS[i].id]=demoDB["prog/"+NUCLEOS[i].id];cbCfg(demoDB.cfg||{});cbProg(p)};
+      demoSubs.push(f);f();return;
+    }
+    Store.raiz.collection("config").doc("geral").onSnapshot(function(s){cbCfg(s.exists?s.data():{})},cbErro);
+    Store.raiz.collection("progresso").onSnapshot(function(q){var p={};q.forEach(function(d){p[d.id]=d.data()});cbProg(p)},cbErro);
+  }
+};
+
+/* ================= UTILITÁRIOS ================= */
+function sha256(txt){
+  if(window.crypto&&crypto.subtle&&window.TextEncoder){
+    return crypto.subtle.digest("SHA-256",new TextEncoder().encode(txt)).then(function(b){
+      var a=new Uint8Array(b),s="",i;for(i=0;i<a.length;i++)s+=("0"+a[i].toString(16)).slice(-2);return s;
+    });
+  }
+  if(DEMO){var h=0,i2;for(i2=0;i2<txt.length;i2++)h=(h*31+txt.charCodeAt(i2))|0;var u=(h>>>0).toString(16),r="";while(r.length<64)r+=u;return Promise.resolve(r.slice(0,64))}
+  return Promise.reject(new Error("sem-crypto"));
+}
+function parseNum(v){
+  var s=String(v==null?"":v).replace(/[^\d,.]/g,"");
+  if(!s)return 0;
+  var temV=s.indexOf(",")>=0;
+  if(temV)s=s.replace(/\./g,"").replace(",",".");
+  else if(/^\d{1,3}(\.\d{3})+$/.test(s))s=s.replace(/\./g,"");
+  var n=parseFloat(s);
+  return isFinite(n)&&n>=0?n:0;
+}
+function fmt(n,d){return Number(n||0).toLocaleString("pt-BR",{minimumFractionDigits:d||0,maximumFractionDigits:d||0})}
+function usd(n){return "US$ "+fmt(Math.round(n))}
+function brl(n){return "R$ "+fmt(Math.round(n))}
+function mesAtual(){var d=new Date();return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)}
+function diasAte(d){return Math.max(0,Math.ceil((d.getTime()-Date.now())/86400000))}
+function mesesAte(d){var a=new Date();return Math.max(0,(d.getFullYear()-a.getFullYear())*12+d.getMonth()-a.getMonth()+1)} /* inclui o mês atual */
+function nucleo(id){var i;for(i=0;i<NUCLEOS.length;i++)if(NUCLEOS[i].id===id)return NUCLEOS[i];return null}
+function plano(n,id){var i;for(i=0;i<n.planos.length;i++)if(n.planos[i].id===id)return n.planos[i];return n.planos[0]}
+function planoDeluxe(n){return plano(n,"luxo")}
+function clampPct(x){x=Number(x);if(!isFinite(x)||x<0)return 0;return Math.min(100,Math.round(x))}
+function quando(ms){
+  var d=Math.floor((Date.now()-Number(ms))/86400000);
+  if(!isFinite(d)||d<0)return "";
+  if(d===0)return "hoje"; if(d===1)return "ontem"; if(d<31)return "há "+d+" dias";
+  return new Date(Number(ms)).toLocaleDateString("pt-BR",{month:"short",year:"numeric"});
+}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+
+/* Valor da reserva em dólares. Milhas só contam até cobrir as passagens do núcleo. */
+function equivalente(n,v,cot){
+  var mil=Number(v.milhas||0)*(PASSAGEM_USD/MILHAS_POR_PASSAGEM);
+  var teto=n.pessoas.length*PASSAGEM_USD;
+  var milUsd=Math.min(mil,teto);
+  return {usd:Number(v.usd||0),brlUsd:Number(v.brl||0)/(cot||COTACAO_PADRAO),milUsd:milUsd,teto:teto,total:Number(v.usd||0)+Number(v.brl||0)/(cot||COTACAO_PADRAO)+milUsd};
+}
+function sequenciaMeses(l){
+  if(!l||!l.length)return 0;
+  var a=l.slice().sort(),c=1,i;
+  for(i=a.length-1;i>0;i--){
+    var x=a[i].split("-"),y=a[i-1].split("-");
+    var dif=(Number(x[0])-Number(y[0]))*12+Number(x[1])-Number(y[1]);
+    if(dif===1)c++;else if(dif!==0)break;
+  }
+  return c;
+}
+function docsFeitos(n,docs){
+  var c=0,i,p;docs=docs||{};
+  for(i=0;i<n.pessoas.length;i++){p=docs[n.pessoas[i]]||{};if(p.p===true)c++;if(p.v===true)c++}
+  return c;
+}
+function todos(n,docs,campo){var i,p;docs=docs||{};for(i=0;i<n.pessoas.length;i++){p=docs[n.pessoas[i]]||{};if(p[campo]!==true)return false}return true}
+function calcular(n,pub,novo){
+  /* novo: {pct,total,milhas} — devolve o documento público atualizado sem valores */
+  var pct=clampPct(novo.pct),docs=novo.docs||pub.docs||{},meses=novo.meses||pub.meses||[];
+  var med={},k;var ant=pub.medalhas||{};for(k in ant)if(MEDALHAS[k])med[k]=ant[k];
+  var t=Date.now(),seq=sequenciaMeses(meses);
+  function gan(id,c){if(c&&!med[id])med[id]=t}
+  gan("inicio",pct>0);gan("p10",pct>=10);gan("p25",pct>=25);gan("p50",pct>=50);gan("p75",pct>=75);gan("p100",pct>=100);
+  gan("deluxe",novo.deluxe===true);gan("milhas",novo.temMilhas===true);
+  gan("passaporte",todos(n,docs,"p"));gan("visto",todos(n,docs,"v"));
+  gan("m3",seq>=3);gan("m6",seq>=6);gan("m12",seq>=12);
+  var pts=pct*10+docsFeitos(n,docs)*100+meses.length*50;
+  return {pct:pct,pts:pts,medalhas:med,meses:meses,docs:docs,atualizadoEm:t};
+}
+
+/* ================= ESTADO ================= */
+var S={tela:"entrada",aba:"painel",codigo:"",chave:"",cfg:null,prog:{},ok:{cfg:false,prog:false},
+  sess:null,priv:null,plano:null,erro:"",criar:false,ocupado:false,fPin:null,fNucleo:null,toast:""};
+
+function salvarSessao(){if(S.sess)lsSet("orl_sess_"+S.chave,JSON.stringify({n:S.sess.n,k:S.sess.k}))}
+
+/* ================= TELAS ================= */
+var AVIAO='<svg class="aviao" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.6 11.2 14 8.7 10.6 2H8.5l1.6 6.1-4.5.1-1.8-2.3H2.2l.9 3.2-.9 3.2h1.6l1.8-2.3 4.5.1-1.6 6.1h2.1L14 15.3l7.6-2.5c1.1-.4 1.1-1.2 0-1.6z" transform="translate(0 1)"/></svg>';
+
+function telaEntrada(){
+  var h='<div class="entrada"><div class="wrap"><div class="card">';
+  h+='<div class="sup">Abril de 2029</div><h1>Rumo a Orlando</h1>';
+  h+='<p>Acompanhe os preparativos da família até o embarque.</p>';
+  if(DEMO)h+='<p class="nota"><b>Modo demonstração:</b> use qualquer código com 8 caracteres ou mais. Os dados são fictícios.</p>';
+  h+='<label for="codigo">Código da família</label><input type="text" id="codigo" autocomplete="off" autocapitalize="characters" value="'+esc(S.codigo||(DEMO?"ORLANDO2029":""))+'">';
+  if(S.erro)h+='<div class="erro" role="alert">'+esc(S.erro)+'</div>';
+  h+='<button class="btn bloco-w" data-a="entrar"'+(S.ocupado?" disabled":"")+'>'+(S.ocupado?"Abrindo…":"Entrar")+'</button>';
+  if(S.criar)h+='<button class="btn claro bloco-w" data-a="criar">Sou o organizador: criar o painel com este código</button>';
+  h+='</div></div></div>';
+  return h;
+}
+function telaCarregando(){
+  return '<div class="entrada"><div class="wrap"><div class="card" aria-live="polite"><h2>Carregando o painel…</h2><p class="nota" id="load-info">Buscando os dados da família.</p></div></div></div>';
+}
+function cabecalho(){
+  var i,soma=0,dx=0,m=0,k;
+  for(i=0;i<NUCLEOS.length;i++){var p=S.prog[NUCLEOS[i].id]||{};soma+=clampPct(p.pct);if(p.medalhas&&p.medalhas.deluxe)dx++;for(k in (p.medalhas||{}))if(MEDALHAS[k])m++}
+  var h='<header class="topo"><div class="wrap"><div class="sup">21/04 a 05/05/2029</div><h1>Rumo a Orlando</h1><div class="linha">';
+  h+='<div class="num"><b>'+fmt(diasAte(DATA_VIAGEM))+'</b><span>dias para o embarque</span></div>';
+  h+='<div class="num"><b>'+Math.round(soma/NUCLEOS.length)+'%</b><span>média da família</span></div>';
+  h+='<div class="num"><b>'+m+'</b><span>medalhas</span></div></div></div></header>';
+  return h;
+}
+function abaPainel(){
+  var h='<section class="bloco"><h2>Quem já está a caminho</h2><div class="card"><div class="rota">',i,n,p,pc;
+  for(i=0;i<NUCLEOS.length;i++){
+    n=NUCLEOS[i];p=S.prog[n.id]||{};pc=clampPct(p.pct);
+    h+='<div class="rota-item"><div class="cab"><span>'+esc(n.nome)+'</span><b>'+pc+'%</b></div>';
+    h+='<div class="trilho" role="img" aria-label="'+esc(n.nome)+': '+pc+' por cento da própria meta"><div class="feito" style="width:calc('+pc+'% + 14px)"></div><div style="position:absolute;left:'+pc+'%;top:0">'+AVIAO+'</div></div></div>';
+  }
+  h+='</div><div class="pontos"><span>São Paulo</span><span>Orlando</span></div></div>';
+  h+='<p class="nota">Cada núcleo avança pela própria meta. Só o percentual aparece aqui: os valores ficam com cada núcleo.</p></section>';
+
+  h+='<section class="bloco"><h2>Cartões de embarque</h2><div class="passes">';
+  for(i=0;i<NUCLEOS.length;i++){
+    n=NUCLEOS[i];p=S.prog[n.id]||{};
+    var meds="",j,id;
+    for(j=0;j<ORDEM_MED.length;j++){id=ORDEM_MED[j];if(p.medalhas&&p.medalhas[id])meds+='<span class="medalha"><span aria-hidden="true">'+MEDALHAS[id].e+'</span>'+MEDALHAS[id].n+'</span>'}
+    h+='<article class="passe"><div class="alto"><strong>'+esc(n.nome)+'</strong><span>'+fmt(Number(p.pts)||0)+' pontos</span></div><div class="corpo">';
+    h+=meds?'<div class="medalhas">'+meds+'</div>':'<div class="vazio">A primeira medalha vem com o primeiro passo.</div>';
+    h+='</div></article>';
+  }
+  h+='</div><p class="nota">Pontos: 10 por 1% da meta, 100 por passaporte ou visto pronto e 50 por mês com reserva nova.</p></section>';
+
+  var ev=[],k;
+  for(i=0;i<NUCLEOS.length;i++){n=NUCLEOS[i];p=S.prog[n.id]||{};for(k in (p.medalhas||{}))if(MEDALHAS[k])ev.push({n:n.nome,k:k,t:Number(p.medalhas[k])})}
+  ev.sort(function(a,b){return b.t-a.t});
+  h+='<section class="bloco"><h2>Últimas conquistas</h2><div class="card">';
+  if(!ev.length)h+='<div class="vazio">Ainda não há conquistas. Quem começa?</div>';
+  else{h+='<ul class="feed">';for(i=0;i<Math.min(6,ev.length);i++)h+='<li><span aria-hidden="true">'+MEDALHAS[ev[i].k].e+'</span><span><b>'+esc(ev[i].n)+'</b>: '+MEDALHAS[ev[i].k].n+'</span><span class="quando">'+quando(ev[i].t)+'</span></li>';h+='</ul>'}
+  h+='</div></section>';
+  h+='<div class="acoes bloco"><button class="btn claro" data-a="convidar">Convidar a família</button><button class="btn claro" data-a="sair-painel">Sair deste aparelho</button></div>';
+  return h;
+}
+function itens(l){var i,h='<ul class="lista">';for(i=0;i<l.length;i++)h+='<li><b>'+esc(l[i].t)+'</b>'+esc(l[i].m)+'</li>';return h+'</ul>'}
+function abaViagem(){
+  var h='<section class="bloco"><h2>O período</h2><div class="card">',i,x;
+  h+='<div class="fato"><span>Datas</span><b>21/04 a 05/05/2029</b></div><div class="fato"><span>Em Orlando</span><b>12 noites</b></div><div class="fato"><span>Hospedagem</span><b>9 na Disney e 3 na Universal</b></div><div class="fato"><span>Dias de parque</span><b>8</b></div><div class="fato"><span>Dias de aula perdidos</span><b>Cerca de 9</b></div>';
+  h+='</div></section>';
+  h+='<section class="bloco"><h2>Por que esse período</h2><div class="card">'+itens(MOTIVOS)+'</div></section>';
+  h+='<section class="bloco"><h2>O roteiro, dia a dia</h2><div class="card">';
+  for(i=0;i<ROTEIRO.length;i++){x=ROTEIRO[i];
+    h+='<div class="dia"><div class="data">'+x.d+'<small>'+x.s+'</small></div><div><div class="prog">'+esc(x.p)+'</div><p>'+esc(x.m)+'</p><span class="tag '+x.t+'">'+x.r+'</span></div></div>';
+  }
+  h+='</div></section>';
+  h+='<section class="bloco"><h2>Por que essas escolhas</h2><div class="card">'+itens(ESCOLHAS)+'</div></section>';
+  h+='<section class="bloco"><h2>Períodos que comparamos</h2><div class="card">'+itens(COMPARA)+'</div></section>';
+  h+='<section class="bloco"><h2>O que ainda pode mudar</h2><div class="card"><p style="margin:0">Os calendários e as regras de 2029 ainda não foram publicados. Quando saírem, vamos conferir eventos que fecham parques mais cedo, competições nos parques, reformas e os benefícios dos hotéis. O roteiro pode trocar dias de lugar por causa disso.</p></div></section>';
+  return h;
+}
+function abaPreparativos(){
+  var marcos=(S.cfg&&S.cfg.marcos)||{},h='<section class="bloco"><h2>Passaportes e vistos</h2><div class="card"><table class="tabela"><thead><tr><th scope="col">Pessoa</th><th scope="col">Passaporte</th><th scope="col">Visto</th></tr></thead><tbody>',i,j,n,d;
+  for(i=0;i<NUCLEOS.length;i++){n=NUCLEOS[i];d=(S.prog[n.id]||{}).docs||{};
+    for(j=0;j<n.pessoas.length;j++){var x=d[n.pessoas[j]]||{};
+      h+='<tr><td>'+esc(n.pessoas[j])+'</td><td>'+(x.p===true?'<span class="ok">Pronto</span>':'<span class="nao">Falta</span>')+'</td><td>'+(x.v===true?'<span class="ok">Pronto</span>':'<span class="nao">Falta</span>')+'</td></tr>';
+    }}
+  h+='</tbody></table></div><p class="nota">Cada núcleo atualiza os próprios documentos na aba Meu núcleo.</p></section>';
+  h+='<section class="bloco"><h2>Linha do tempo da família</h2><div class="card">';
+  for(i=0;i<MARCOS.length;i++){var on=marcos[MARCOS[i].id]===true;
+    h+='<button class="marco'+(on?" on":"")+'" aria-pressed="'+on+'" data-a="marco" data-id="'+MARCOS[i].id+'"><span class="caixa'+(on?" on":"")+'" aria-hidden="true">'+(on?"✓":"")+'</span><span><span class="t">'+esc(MARCOS[i].t)+'</span><small>'+esc(MARCOS[i].q)+'</small></span></button>';
+  }
+  h+='</div></section>';
+  var cot=(S.cfg&&Number(S.cfg.cotacao))||COTACAO_PADRAO;
+  h+='<section class="bloco"><h2>Cotação usada nas contas</h2><div class="card"><label for="cot" style="margin-top:0">Dólar, em reais</label><input id="cot" inputmode="decimal" value="'+fmt(cot,2)+'"><button class="btn claro bloco-w" data-a="salvar-cot">Atualizar cotação</button><p class="nota">Vale para todos. O percentual de cada núcleo muda quando ele salvar de novo.</p></div></section>';
+  return h;
+}
+function abaNucleo(){
+  if(!S.sess)return telaEscolha();
+  var n=nucleo(S.sess.n),v=S.priv||{},pub=S.prog[n.id]||{},cot=(S.cfg&&Number(S.cfg.cotacao))||COTACAO_PADRAO;
+  var pl=plano(n,S.plano||v.plano||"inter");
+  var meta=v.plano==="custom"||S.plano==="custom"?Number(v.metaCustom)||pl.usd:pl.usd;
+  var eq=equivalente(n,v,cot),pct=clampPct(eq.total/meta*100);
+  var h='<section class="bloco"><div class="resumo"><div class="nota" style="color:#CDD8EA">'+esc(n.nome)+'</div><div class="gr">'+pct+'%</div><div class="barra"><i style="width:'+pct+'%"></i></div>';
+  h+='<div class="det">'+usd(eq.total)+' de '+usd(meta)+' guardados</div></div>';
+  h+='<div class="card guia" id="guia">'+htmlGuia(n,v,meta,cot)+'</div>';
+  h+='<div class="card"><h2 style="font-size:20px">Quanto vocês já guardaram</h2><p class="nota">Informe o total atual de cada item. Só quem tem o PIN de vocês vê estes valores.</p>';
+  h+='<label for="f-brl">Em reais (R$)</label><input id="f-brl" inputmode="decimal" value="'+(v.brl?fmt(v.brl,2):"")+'" placeholder="0,00">';
+  h+='<label for="f-usd">Em dólares (US$)</label><input id="f-usd" inputmode="decimal" value="'+(v.usd?fmt(v.usd,2):"")+'" placeholder="0,00">';
+  h+='<label for="f-mil">Em milhas ou pontos</label><input id="f-mil" inputmode="numeric" value="'+(v.milhas?fmt(v.milhas):"")+'" placeholder="0">';
+  h+='<p class="nota">Milhas contam só até cobrir as passagens de vocês ('+fmt(n.pessoas.length*MILHAS_POR_PASSAGEM)+' milhas, ou '+usd(eq.teto)+').</p>';
+  h+='<label for="f-plano">Meta de vocês</label><select id="f-plano">';
+  var i;for(i=0;i<n.planos.length;i++)h+='<option value="'+n.planos[i].id+'"'+((S.plano||v.plano||"inter")===n.planos[i].id?" selected":"")+'>'+esc(n.planos[i].nome)+' – '+usd(n.planos[i].usd)+'</option>';
+  h+='<option value="custom"'+((S.plano||v.plano)==="custom"?" selected":"")+'>Outro valor</option></select>';
+  h+='<div id="wrap-custom" style="display:'+((S.plano||v.plano)==="custom"?"block":"none")+'"><label for="f-custom">Meta em dólares</label><input id="f-custom" inputmode="numeric" value="'+(v.metaCustom?fmt(v.metaCustom):"")+'"></div>';
+  h+='<p class="nota">A meta escolhida não aparece para os outros. A Deluxe considera 9 noites no Beach Club e 3 no Cabana Bay.</p>';
+  if(S.erro)h+='<div class="erro" role="alert">'+esc(S.erro)+'</div>';
+  h+='<button class="btn bloco-w" data-a="salvar"'+(S.ocupado?" disabled":"")+'>'+(S.ocupado?"Salvando…":"Salvar")+'</button></div></section>';
+  h+='<section class="bloco"><h2>Composição da meta</h2><div class="card" id="comp">'+htmlComp(n,S.plano||v.plano||"inter")+'</div></section>';
+  h+='<section class="bloco"><h2>Documentos</h2><div class="card">';
+  var j,d=pub.docs||{};
+  for(j=0;j<n.pessoas.length;j++){var x=d[n.pessoas[j]]||{},nm=n.pessoas[j];
+    h+='<div class="pessoa">'+esc(nm)+'</div>';
+    h+='<button class="check" aria-pressed="'+(x.p===true)+'" data-a="doc" data-p="'+esc(nm)+'" data-c="p"><span class="caixa'+(x.p===true?" on":"")+'" aria-hidden="true">'+(x.p===true?"✓":"")+'</span>Passaporte pronto</button>';
+    h+='<button class="check" aria-pressed="'+(x.v===true)+'" data-a="doc" data-p="'+esc(nm)+'" data-c="v"><span class="caixa'+(x.v===true?" on":"")+'" aria-hidden="true">'+(x.v===true?"✓":"")+'</span>Visto pronto</button>';
+  }
+  h+='</div></section>'+blocoHistorico(v)+'<button class="btn link" data-a="sair-nucleo">Trocar de núcleo</button>';
+  return h;
+}
+function rotuloMes(m){
+  var p=String(m).split("-"),nomes=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+  return (nomes[Number(p[1])-1]||"")+"/"+p[0];
+}
+function blocoHistorico(v){
+  var hist=v.historico||{},meses=Object.keys(hist).filter(function(m){return /^\d{4}-\d{2}$/.test(m)}).sort().reverse(),i,r;
+  var h='<section class="bloco"><h2>Histórico mês a mês</h2><div class="card">';
+  if(!meses.length)h+='<div class="vazio">O primeiro registro aparece quando vocês salvarem os valores.</div>';
+  else{
+    h+='<table class="tabela hist"><thead><tr><th scope="col">Mês</th><th scope="col">Reais</th><th scope="col">Dólares</th><th scope="col">Milhas</th></tr></thead><tbody>';
+    for(i=0;i<meses.length;i++){r=hist[meses[i]]||{};
+      h+='<tr><td>'+rotuloMes(meses[i])+'</td><td>'+brl(Number(r.brl)||0)+'</td><td>'+usd(Number(r.usd)||0)+'</td><td>'+fmt(Number(r.milhas)||0)+'</td></tr>';
+    }
+    h+='</tbody></table>';
+  }
+  h+='</div><p class="nota">Cada linha mostra o total guardado na última atualização do mês. Só quem tem o PIN de vocês vê este histórico.</p></section>';
+  return h;
+}
+/* Orientação mensal: parte do saldo do fim do mês anterior, então o valor do mês não muda enquanto se guarda. */
+function saldoBase(v){
+  var hist=v.historico||{},m=mesAtual(),l=Object.keys(hist).filter(function(x){return /^\d{4}-\d{2}$/.test(x)&&x<m}).sort();
+  return l.length?hist[l[l.length-1]]:{brl:0,usd:0,milhas:0};
+}
+function htmlGuia(n,v,meta,cot){
+  var m=mesesAte(FIM_RESERVA),atual=equivalente(n,v,cot),base=saldoBase(S.priv||{}),bEq=equivalente(n,base,cot);
+  var h='<h2 style="font-size:20px">Quanto guardar por mês</h2>';
+  if(atual.total>=meta)return h+'<p class="alvo">Meta completa!</p><p class="nota">Vocês já chegaram ao valor da meta escolhida.</p>';
+  if(m<=0)return h+'<p class="alvo">'+usd(meta-atual.total)+'</p><p class="nota">O prazo de março de 2029 chegou, e este é o valor que ainda falta.</p>';
+  var alvo=Math.max(0,meta-bEq.total)/m,feito=Math.max(0,atual.total-bEq.total),restaMes=Math.max(0,alvo-feito);
+  h+='<p class="alvo">'+usd(alvo)+' <small>por mês</small></p><p class="nota" style="margin-top:0">Cerca de '+brl(alvo*cot)+', em '+m+(m===1?" mês":" meses")+' até março de 2029.</p>';
+  h+='<div class="fato"><span>Guardado em '+rotuloMes(mesAtual())+'</span><b>'+usd(feito)+'</b></div>';
+  h+='<div class="fato"><span>Falta neste mês</span><b>'+(restaMes>0?usd(restaMes):"Mês concluído ✓")+'</b></div>';
+  var limite=n.pessoas.length*MILHAS_POR_PASSAGEM,cash=Number(base.usd||0)+Number(base.brl||0)/cot;
+  var dinheiro=Math.max(0,meta-cash-n.pessoas.length*PASSAGEM_USD)/m,mil=Math.max(0,limite-Number(base.milhas||0))/m;
+  h+='<p class="alt"><b>Se as passagens forem pagas com milhas:</b> '+usd(dinheiro)+' por mês (cerca de '+brl(dinheiro*cot)+') e mais '+fmt(Math.ceil(mil/100)*100)+' milhas por mês.</p>';
+  h+='<p class="nota">O valor é recalculado a cada mês, com o saldo, a meta e a cotação atuais. Passagens e reservas vencem antes de março de 2029, então vale adiantar quando der.</p>';
+  return h;
+}
+function atualizarGuia(){
+  var g=document.getElementById("guia"),s=document.getElementById("f-plano");
+  if(!g||!s||!S.sess)return;
+  var n=nucleo(S.sess.n),cot=(S.cfg&&Number(S.cfg.cotacao))||COTACAO_PADRAO,pid=s.value,meta;
+  if(pid==="custom")meta=parseNum(document.getElementById("f-custom").value)||plano(n,"inter").usd;else meta=plano(n,pid).usd;
+  g.innerHTML=htmlGuia(n,{brl:parseNum(document.getElementById("f-brl").value),usd:parseNum(document.getElementById("f-usd").value),milhas:parseNum(document.getElementById("f-mil").value)},meta,cot);
+}
+function telaEscolha(){
+  var h='<section class="bloco">';
+  if(!S.fNucleo){
+    h+='<h2>Qual é o seu núcleo?</h2><div class="grade2">';var i;
+    for(i=0;i<NUCLEOS.length;i++)h+='<button class="opc" data-a="esc-n" data-id="'+NUCLEOS[i].id+'">'+esc(NUCLEOS[i].nome)+(NUCLEOS[i].sub?'<br><span class="nota">'+esc(NUCLEOS[i].sub)+'</span>':"")+'</button>';
+    h+='</div></section>';return h;
+  }
+  var n=nucleo(S.fNucleo),tem=!!((S.prog[n.id]||{}).pinTag);
+  h+='<div class="card"><h2>'+esc(n.nome)+'</h2><p>'+(tem?"Digite o PIN de vocês.":"Crie um PIN de 4 números. Ele protege os valores de vocês e será pedido em cada aparelho novo.")+'</p>';
+  h+='<label for="pin">PIN</label><input type="password" id="pin" inputmode="numeric" maxlength="4" autocomplete="off">';
+  if(!tem){h+='<label for="pin2">Repita o PIN</label><input type="password" id="pin2" inputmode="numeric" maxlength="4" autocomplete="off">'}
+  if(S.erro)h+='<div class="erro" role="alert">'+esc(S.erro)+'</div>';
+  h+='<button class="btn bloco-w" data-a="pin"'+(S.ocupado?" disabled":"")+'>'+(tem?"Entrar":"Criar PIN")+'</button>';
+  h+='<div class="acoes" style="justify-content:space-between;margin-top:6px"><button class="btn link" data-a="volta-n">Voltar</button>'+(tem?'<button class="btn link" data-a="esqueci">Esqueci o PIN</button>':"")+'</div></div></section>';
+  return h;
+}
+function render(){
+  var el=document.getElementById("app"),h="";
+  if(DEMO&&S.tela!=="entrada")h+='<div class="demo">Modo demonstração: dados fictícios, nada é salvo na nuvem</div>';
+  if(S.tela==="entrada"){h+=telaEntrada();document.body.className="sem-nav"}
+  else if(S.tela==="carregando"){h+=telaCarregando();document.body.className="sem-nav"}
+  else{
+    document.body.className="";
+    h+=cabecalho()+'<main class="wrap">';
+    if(S.aba==="painel")h+=abaPainel();else if(S.aba==="viagem")h+=abaViagem();else if(S.aba==="prep")h+=abaPreparativos();else h+=abaNucleo();
+    h+='<div class="rodape">Versão '+BUILD+'</div></main>';
+    h+='<nav class="abas" aria-label="Seções">'+btAba("painel","🛫","Painel")+btAba("viagem","🗺️","A viagem")+btAba("prep","✅","Preparativos")+btAba("nucleo","💰","Meu núcleo")+'</nav>';
+    if(S.toast)h+='<div class="toast" role="status">'+esc(S.toast)+'</div>';
+  }
+  el.innerHTML=h;
+}
+function btAba(id,ic,t){return '<button data-a="aba" data-id="'+id+'"'+(S.aba===id?' aria-current="page"':"")+'><span class="ic" aria-hidden="true">'+ic+'</span>'+t+'</button>'}
+function digitando(){var a=document.activeElement;return a&&(a.tagName==="INPUT"||a.tagName==="SELECT")}
+function renderSeguro(){if(!digitando())render()}
+var tmToast;
+function aviso(t){S.toast=t;render();clearTimeout(tmToast);tmToast=setTimeout(function(){S.toast="";renderSeguro()},4200)}
+function confete(){
+  var c=["#E8552D","#F4B740","#0B7A6F","#1D3866"],i;
+  for(i=0;i<36;i++){(function(i){var e=document.createElement("div");e.className="confete";e.style.left=Math.random()*100+"vw";e.style.background=c[i%4];e.style.animationDelay=Math.random()*.5+"s";document.body.appendChild(e);setTimeout(function(){if(e.parentNode)e.parentNode.removeChild(e)},2500)})(i)}
+}
+
+/* ================= AÇÕES ================= */
+function erroRede(e){
+  if(e&&e.message==="sem-firebase")return "Não consegui falar com o servidor agora. Verifique a conexão e recarregue a página.";
+  if(e&&e.code==="permission-denied")return "O servidor recusou o acesso. Avise o Tarcísio.";
+  return "Não consegui concluir agora. Verifique a conexão e tente de novo.";
+}
+function normalizarCodigo(c){return String(c||"").trim().toUpperCase().replace(/\s+/g,"")}
+function entrar(cod,auto){
+  cod=normalizarCodigo(cod);S.codigo=cod;S.criar=false;S.erro="";
+  if(cod.length<8){S.erro="O código tem pelo menos 8 caracteres.";S.tela="entrada";render();return}
+  S.ocupado=true;render();
+  sha256("orlando2029|"+cod).then(function(k){
+    S.chave=k;
+    return Store.conectar(k).then(function(){return Store.lerConfig()});
+  }).then(function(c){
+    S.ocupado=false;
+    if(!c){S.erro="Não encontrei um painel com esse código. Confira se digitou certo.";S.criar=true;S.tela="entrada";render();return}
+    abrir();
+  }).catch(function(e){S.ocupado=false;S.tela="entrada";S.erro=erroRede(e);render()});
+}
+function abrir(){
+  lsSet("orl_cod",S.codigo);
+  S.tela="carregando";render();
+  var timer=setTimeout(function(){
+    if(S.tela==="carregando"){var i=document.getElementById("load-info");if(i)i.innerHTML='Está demorando mais que o normal. <button class="btn claro" data-a="recarregar">Recarregar</button>'}
+  },10000);
+  var ouvindo=false;
+  function pronto(){
+    if(S.ok.cfg&&S.ok.prog&&S.tela==="carregando"){clearTimeout(timer);S.tela="app";
+      var r=lsGet("orl_sess_"+S.chave);
+      if(r&&!ouvindo){ouvindo=true;try{var o=JSON.parse(r);if(nucleo(o.n)&&o.k){abrirNucleo(o.n,o.k);return}}catch(e){}}
+      render();
+    } else if(S.tela==="app")renderSeguro();
+  }
+  Store.ouvir(function(c){S.cfg=c;S.ok.cfg=true;pronto()},function(p){S.prog=p;S.ok.prog=true;pronto()},function(e){
+    clearTimeout(timer);S.tela="entrada";S.erro=erroRede(e);render();
+  });
+}
+function abrirNucleo(id,k){
+  S.sess={n:id,k:k};S.plano=null;
+  return Store.lerPriv(k).then(function(v){S.priv=v||{};S.plano=S.priv.plano||null;S.fNucleo=null;S.erro="";salvarSessao();render()})
+    .catch(function(e){S.sess=null;S.erro=erroRede(e);render()});
+}
+function tratarPin(){
+  var pin=(document.getElementById("pin")||{}).value||"",p2=document.getElementById("pin2");
+  var n=S.fNucleo,pub=S.prog[n]||{};
+  S.erro="";
+  if(!/^\d{4}$/.test(pin)){S.erro="O PIN tem 4 números.";render();return}
+  if(p2&&p2.value!==pin){S.erro="Os PINs não são iguais.";render();return}
+  S.ocupado=true;render();
+  var kPriv,tag;
+  sha256(S.chave+"|"+n+"|"+pin+"|privado").then(function(k){kPriv=k;return sha256(S.chave+"|"+n+"|"+pin+"|tag")}).then(function(t){
+    tag=t;
+    if(pub.pinTag&&pub.pinTag!==tag){S.ocupado=false;S.erro="PIN incorreto.";render();return null}
+    if(!pub.pinTag)return Store.gravarProg(n,{pinTag:tag,atualizadoEm:Date.now()}).then(function(){return abrirNucleo(n,kPriv)});
+    return abrirNucleo(n,kPriv);
+  }).then(function(){S.ocupado=false;render()}).catch(function(e){S.ocupado=false;S.erro=erroRede(e);render()});
+}
+function salvarValores(){
+  var n=nucleo(S.sess.n),pub=S.prog[n.id]||{},cot=(S.cfg&&Number(S.cfg.cotacao))||COTACAO_PADRAO;
+  var pid=document.getElementById("f-plano").value;
+  var v={brl:parseNum(document.getElementById("f-brl").value),usd:parseNum(document.getElementById("f-usd").value),milhas:Math.round(parseNum(document.getElementById("f-mil").value)),plano:pid,atualizadoEm:Date.now()};
+  var meta;
+  if(pid==="custom"){v.metaCustom=Math.round(parseNum(document.getElementById("f-custom").value));if(v.metaCustom<=0){S.erro="Informe a meta em dólares.";render();return}meta=v.metaCustom}
+  else{v.metaCustom=0;meta=plano(n,pid).usd}
+  /* O mês atual guarda a última atualização; os meses anteriores ficam preservados. */
+  v.historico=deepMerge({},(S.priv&&S.priv.historico)||{});
+  v.historico[mesAtual()]={brl:v.brl,usd:v.usd,milhas:v.milhas};
+  var antes=equivalente(n,S.priv||{},cot).total,eq=equivalente(n,v,cot);
+  var meses=(pub.meses||[]).slice(),m=mesAtual();
+  if(eq.total>antes&&meses.indexOf(m)<0)meses.push(m);
+  var novo=calcular(n,pub,{pct:eq.total/meta*100,meses:meses,deluxe:eq.total>=planoDeluxe(n).usd,temMilhas:v.milhas>0});
+  var ganhou=[],k;for(k in novo.medalhas)if(!(pub.medalhas||{})[k])ganhou.push(MEDALHAS[k].n);
+  S.ocupado=true;S.erro="";render();
+  Store.gravarPriv(S.sess.k,v).then(function(){return Store.gravarProg(n.id,novo)}).then(function(){
+    S.priv=v;S.plano=pid;S.ocupado=false;
+    if(ganhou.length){aviso("Nova medalha: "+ganhou.join(", ")+"!");confete()}else aviso("Salvo!");
+  }).catch(function(e){S.ocupado=false;S.erro=erroRede(e);render()});
+}
+function alternarDoc(p,c){
+  var n=nucleo(S.sess.n),pub=S.prog[n.id]||{},docs=deepMerge({},pub.docs||{}),cot=(S.cfg&&Number(S.cfg.cotacao))||COTACAO_PADRAO;
+  var x=deepMerge({},docs[p]||{});x[c]=!(x[c]===true);docs[p]=x;
+  var eq=equivalente(n,S.priv||{},cot);
+  var novo=calcular(n,pub,{pct:pub.pct,docs:docs,deluxe:eq.total>=planoDeluxe(n).usd,temMilhas:Number((S.priv||{}).milhas)>0});
+  var ganhou=[],k;for(k in novo.medalhas)if(!(pub.medalhas||{})[k])ganhou.push(MEDALHAS[k].n);
+  Store.gravarProg(n.id,novo).then(function(){if(ganhou.length){aviso("Nova medalha: "+ganhou.join(", ")+"!");confete()}}).catch(function(e){aviso(erroRede(e))});
+}
+function convidar(){
+  var url=location.href.split("#")[0]+"#c="+encodeURIComponent(S.codigo);
+  var txt="Painel da nossa viagem a Orlando. Abra o link, escolha seu núcleo e crie seu PIN: "+url;
+  if(navigator.share){navigator.share({title:"Rumo a Orlando",text:txt}).catch(function(){})}
+  else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(function(){aviso("Convite copiado. É só colar no grupo da família.")},function(){aviso(url)})}
+  else aviso(url);
+}
+
+document.addEventListener("change",function(ev){
+  if(ev.target&&ev.target.id==="f-plano"){var w=document.getElementById("wrap-custom");if(w)w.style.display=ev.target.value==="custom"?"block":"none";var cp=document.getElementById("comp");if(cp&&S.sess)cp.innerHTML=htmlComp(nucleo(S.sess.n),ev.target.value);atualizarGuia()}
+});
+document.addEventListener("input",function(ev){
+  var i=ev.target&&ev.target.id;if(i==="f-brl"||i==="f-usd"||i==="f-mil"||i==="f-custom")atualizarGuia();
+});
+document.addEventListener("click",function(ev){
+  var b=ev.target.closest?ev.target.closest("[data-a]"):null;if(!b)return;
+  var a=b.getAttribute("data-a");
+  if(a==="entrar")entrar(document.getElementById("codigo").value);
+  else if(a==="criar"){
+    S.ocupado=true;
+    Store.gravarConfig({cotacao:COTACAO_PADRAO,marcos:{},criadoEm:Date.now()}).then(function(){S.ocupado=false;S.criar=false;abrir()}).catch(function(e){S.ocupado=false;S.erro=erroRede(e);render()});
+  }
+  else if(a==="aba"){S.aba=b.getAttribute("data-id");S.erro="";render();window.scrollTo(0,0)}
+  else if(a==="marco"){var id=b.getAttribute("data-id"),o={marcos:{}};o.marcos[id]=!(S.cfg.marcos&&S.cfg.marcos[id]===true);Store.gravarConfig(o).catch(function(e){aviso(erroRede(e))})}
+  else if(a==="salvar-cot"){var c=parseNum(document.getElementById("cot").value);if(c<1||c>50){aviso("Informe uma cotação válida, como 5,50.");return}document.activeElement&&document.activeElement.blur();Store.gravarConfig({cotacao:c}).then(function(){aviso("Cotação atualizada.")}).catch(function(e){aviso(erroRede(e))})}
+  else if(a==="esc-n"){S.fNucleo=b.getAttribute("data-id");S.erro="";render()}
+  else if(a==="volta-n"){S.fNucleo=null;S.erro="";render()}
+  else if(a==="pin")tratarPin();
+  else if(a==="esqueci"){
+    if(window.confirm("Criar um novo PIN? Os valores salvos com o PIN antigo não serão recuperados, e vocês precisarão digitá-los de novo. O percentual e as medalhas continuam.")){
+      Store.gravarProg(S.fNucleo,{pinTag:firebaseApagarTag(),atualizadoEm:Date.now()}).then(function(){S.prog[S.fNucleo]=deepMerge(S.prog[S.fNucleo]||{},{pinTag:""});S.erro="";render()}).catch(function(e){S.erro=erroRede(e);render()});
+    }
+  }
+  else if(a==="salvar")salvarValores();
+  else if(a==="doc")alternarDoc(b.getAttribute("data-p"),b.getAttribute("data-c"));
+  else if(a==="sair-nucleo"){lsDel("orl_sess_"+S.chave);S.sess=null;S.priv=null;S.plano=null;S.fNucleo=null;S.erro="";render()}
+  else if(a==="sair-painel"){if(window.confirm("Sair deste aparelho? Para voltar, será preciso digitar o código da família e o PIN.")){lsDel("orl_cod");lsDel("orl_sess_"+S.chave);location.href=location.href.split("#")[0]}}
+  else if(a==="convidar")convidar();
+  else if(a==="recarregar")location.reload();
+});
+function firebaseApagarTag(){return ""}
+document.addEventListener("visibilitychange",function(){if(!document.hidden&&S.tela==="app")renderSeguro()});
+
+/* ================= INÍCIO ================= */
+(function(){
+  var cod="",m=/[#&]c=([^&]+)/.exec(location.hash||"");
+  if(m){try{cod=decodeURIComponent(m[1])}catch(e){}if(window.history&&history.replaceState)history.replaceState(null,"",location.pathname+location.search)}
+  if(!cod)cod=lsGet("orl_cod")||"";
+  S.codigo=cod;
+  render();
+  if(cod)entrar(cod);
+})();
+</script>
+</body>
+</html>
