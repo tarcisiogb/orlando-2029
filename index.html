@@ -117,6 +117,16 @@ main.wrap{padding-top:22px}
 .guia .fato:first-of-type{border-top:1px solid var(--linha);padding-top:9px;margin-top:10px}
 .guia .fato:last-of-type{padding-bottom:9px}
 .guia .alt{background:var(--mar-claro);border-radius:12px;padding:11px 12px;font-size:15px;margin:10px 0}
+.sub-t{font-size:18px;margin-top:20px}
+.prog-l{display:grid;grid-template-columns:1fr 112px;gap:9px;align-items:end}
+.prog-l label{margin-top:12px;font-size:15px}
+.calc{background:#FBF5EA;border-radius:12px;padding:12px;margin-top:14px}
+.calc .fato{border-top:0;padding:0 0 8px}
+.prog-t{font-size:14px}
+.prog-t th,.prog-t td{text-align:right;padding:8px 0 8px 8px}
+.prog-t th:first-child,.prog-t td:first-child{text-align:left;padding-left:0}
+.alerta{background:var(--ouro-claro);border-radius:10px;padding:9px 11px;font-size:14px;font-weight:700;margin:10px 0 0}
+.tabela.hist .det-prog td{border-top:0;padding:0 0 9px;text-align:left;white-space:normal;font-size:13px;font-weight:400;color:var(--suave)}
 .ok{color:var(--mar);font-weight:800}
 .nao{color:#98A1B0}
 .marco{display:flex;gap:12px;align-items:flex-start;width:100%;background:none;border:0;border-top:1px solid var(--linha);padding:12px 0;text-align:left}
@@ -127,6 +137,7 @@ main.wrap{padding-top:22px}
 .marco.on span.t{text-decoration:line-through;color:var(--suave)}
 label{display:block;font-weight:800;margin:14px 0 5px}
 input[type=text],input[type=password],input[inputmode],select{width:100%;min-height:48px;background:#fff;border:1.5px solid #C9C2B5;border-radius:12px;padding:10px 12px;font-size:17px}
+select{font-size:16px!important;padding-left:8px!important;padding-right:4px!important}
 .btn{display:inline-flex;justify-content:center;align-items:center;min-height:48px;border:0;border-radius:13px;background:var(--coral-esc);color:#fff;font-weight:800;padding:10px 18px}
 .btn.claro{background:transparent;color:var(--noite);border:1.5px solid var(--noite)}
 .btn.link{background:none;color:var(--coral-esc);padding:8px 0;min-height:44px;text-decoration:underline}
@@ -165,7 +176,7 @@ nav.abas .ic{display:block;font-size:20px;line-height:1.2}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
 <script>
 /* ================= CONFIGURAÇÃO ================= */
-var BUILD = "2026-11-05g";
+var BUILD = "2026-11-05h";
 var FIREBASE_CONFIG = {
   apiKey: "AIzaSyBT5_QhfJwfFpKUbw9e3O7-mtqAl1zicCg",
   authDomain: "orlando-2029.firebaseapp.com",
@@ -553,8 +564,7 @@ function abaNucleo(){
   h+='<div class="card"><h2 style="font-size:20px">Quanto vocês já guardaram</h2><p class="nota">Informe o total atual de cada item. Só quem tem o PIN de vocês vê estes valores.</p>';
   h+='<label for="f-brl">Em reais (R$)</label><input id="f-brl" inputmode="decimal" value="'+(v.brl?fmt(v.brl,2):"")+'" placeholder="0,00">';
   h+='<label for="f-usd">Em dólares (US$)</label><input id="f-usd" inputmode="decimal" value="'+(v.usd?fmt(v.usd,2):"")+'" placeholder="0,00">';
-  h+='<label for="f-mil">Em milhas ou pontos</label><input id="f-mil" inputmode="numeric" value="'+(v.milhas?fmt(v.milhas):"")+'" placeholder="0">';
-  h+='<p class="nota">Milhas contam só até cobrir as passagens de vocês ('+fmt(n.pessoas.length*MILHAS_POR_PASSAGEM)+' milhas, ou '+usd(eq.teto)+').</p>';
+  h+=htmlFormMilhas(n,v,eq);
   h+='<label for="f-plano">Meta de vocês</label><select id="f-plano">';
   var i;for(i=0;i<n.planos.length;i++)h+='<option value="'+n.planos[i].id+'"'+((S.plano||v.plano||"inter")===n.planos[i].id?" selected":"")+'>'+esc(n.planos[i].nome)+' – '+usd(n.planos[i].usd)+'</option>';
   h+='<option value="custom"'+((S.plano||v.plano)==="custom"?" selected":"")+'>Outro valor</option></select>';
@@ -585,6 +595,7 @@ function blocoHistorico(v){
     h+='<table class="tabela hist"><thead><tr><th scope="col">Mês</th><th scope="col">Reais</th><th scope="col">Dólares</th><th scope="col">Milhas</th></tr></thead><tbody>';
     for(i=0;i<meses.length;i++){r=hist[meses[i]]||{};
       h+='<tr><td>'+rotuloMes(meses[i])+'</td><td>'+brl(Number(r.brl)||0)+'</td><td>'+usd(Number(r.usd)||0)+'</td><td>'+fmt(Number(r.milhas)||0)+'</td></tr>';
+      if(r.latam!==undefined)h+='<tr class="det-prog"><td colspan="4">LATAM '+fmt(Number(r.latam)||0)+' · Smiles '+fmt(Number(r.smiles)||0)+' · Azul '+fmt(Number(r.azul)||0)+' · Banco '+fmt(Number(r.banco)||0)+'</td></tr>';
     }
     h+='</tbody></table>';
   }
@@ -592,6 +603,60 @@ function blocoHistorico(v){
   return h;
 }
 /* Orientação mensal: parte do saldo do fim do mês anterior, então o valor do mês não muda enquanto se guarda. */
+var PROGRAMAS=[{id:"latam",n:"LATAM Pass"},{id:"smiles",n:"Smiles (Gol)"},{id:"azul",n:"Azul Fidelidade"},{id:"banco",n:"Pontos do banco"}];
+function fatorDe(v){var f=Number(v.fator);return f>0?f:1}
+function totalMilhas(pr,f){return Math.round((Number(pr.latam)||0)+(Number(pr.smiles)||0)+(Number(pr.azul)||0)+(Number(pr.banco)||0)*f)}
+function vencTexto(m){var x=/^(\d{4})-(\d{2})$/.exec(String(m||""));return x?x[2]+"/"+x[1]:""}
+function parseVenc(t){
+  var d=String(t||"").replace(/\D/g,"");if(!d)return "";
+  if(d.length===4)d=d.slice(0,2)+"20"+d.slice(2);
+  if(d.length!==6)return null;
+  var m=Number(d.slice(0,2));if(m<1||m>12)return null;
+  return d.slice(2)+"-"+d.slice(0,2);
+}
+function htmlFormMilhas(n,v,eq){
+  var pr=v.programas||{},ve=v.vencimentos||{},i,x,h='<h3 class="sub-t">Milhas e pontos</h3>';
+  if(!v.programas&&Number(v.milhas)>0)h+='<p class="alerta">Vocês tinham '+fmt(v.milhas)+' milhas em um único campo. Distribua esse saldo entre os programas e salve.</p>';
+  for(i=0;i<PROGRAMAS.length;i++){x=PROGRAMAS[i];
+    h+='<div class="prog-l"><div><label for="f-p-'+x.id+'">'+x.n+'</label><input id="f-p-'+x.id+'" inputmode="numeric" value="'+(pr[x.id]?fmt(pr[x.id]):"")+'" placeholder="0"></div>';
+    h+='<div><label for="f-v-'+x.id+'">Vence em</label><input id="f-v-'+x.id+'" inputmode="numeric" maxlength="7" value="'+vencTexto(ve[x.id])+'" placeholder="mm/aaaa"></div></div>';
+  }
+  h+='<label for="f-fator">Cada 1.000 pontos do banco viram quantas milhas?</label><input id="f-fator" inputmode="numeric" value="'+fmt(Math.round(fatorDe(v)*1000))+'">';
+  h+='<p class="nota">Confira a proporção no seu banco. Informe o vencimento mais próximo de cada saldo, se quiser receber o aviso.</p>';
+  h+='<div id="milhas-calc">'+htmlCalcMilhas(n,pr,fatorDe(v),ve)+'</div>';
+  return h;
+}
+function htmlCalcMilhas(n,pr,f,ve){
+  var i,x,conv=Math.round((Number(pr.banco)||0)*f),q=n.pessoas.length,tot=totalMilhas(pr,f),h='<div class="calc"><div class="fato"><span>Total em milhas</span><b>'+fmt(tot)+'</b></div>';
+  h+='<table class="tabela prog-t"><thead><tr><th scope="col">Passagens possíveis</th><th scope="col">Só o programa</th><th scope="col">Com o banco</th></tr></thead><tbody>';
+  var melhor=-1,nomes=[];
+  for(i=0;i<3;i++){x=PROGRAMAS[i];
+    var s=Number(pr[x.id])||0,a=Math.min(q,Math.floor(s/MILHAS_POR_PASSAGEM)),b=Math.min(q,Math.floor((s+conv)/MILHAS_POR_PASSAGEM));
+    h+='<tr><td>'+x.n+'</td><td>'+a+' de '+q+'</td><td>'+b+' de '+q+'</td></tr>';
+    if(b>melhor){melhor=b;nomes=[x.n]}else if(b===melhor)nomes.push(x.n);
+  }
+  h+='</tbody></table>';
+  if(conv>0&&melhor>0&&nomes.length<3)h+='<p class="nota">Pelos saldos atuais, os pontos do banco completam mais passagens em: <b>'+nomes.join(" ou ")+'</b>.</p>';
+  h+='<p class="nota">Conta estimada com 120 mil milhas por passagem. No percentual, as milhas valem até cobrir as passagens de vocês ('+fmt(q*MILHAS_POR_PASSAGEM)+' milhas).</p>';
+  var hoje=mesAtual(),d=new Date(),lim=new Date(d.getFullYear(),d.getMonth()+6,1),l6=lim.getFullYear()+"-"+("0"+(lim.getMonth()+1)).slice(-2);
+  for(i=0;i<PROGRAMAS.length;i++){x=PROGRAMAS[i];var m=(ve||{})[x.id];
+    if(m&&(Number(pr[x.id])||0)>0){
+      if(m<hoje)h+='<p class="alerta">'+x.n+': o saldo informado venceu em '+vencTexto(m)+'. Confira no programa.</p>';
+      else if(m<=l6)h+='<p class="alerta">'+x.n+': saldo vence em '+vencTexto(m)+'.</p>';
+    }
+  }
+  return h+'</div>';
+}
+function lerMilhasForm(){
+  var pr={},ve={},i,e,id,erro=false;
+  for(i=0;i<PROGRAMAS.length;i++){id=PROGRAMAS[i].id;
+    pr[id]=Math.round(parseNum((document.getElementById("f-p-"+id)||{}).value));
+    e=parseVenc((document.getElementById("f-v-"+id)||{}).value);
+    if(e===null)erro=true;else if(e)ve[id]=e;
+  }
+  var ff=parseNum((document.getElementById("f-fator")||{}).value),f=ff>0?ff/1000:1;
+  return {programas:pr,vencimentos:ve,fator:f,milhas:totalMilhas(pr,f),erroVenc:erro,fatorOk:ff>0&&ff<=10000};
+}
 function saldoBase(v){
   var hist=v.historico||{},m=mesAtual(),l=Object.keys(hist).filter(function(x){return /^\d{4}-\d{2}$/.test(x)&&x<m}).sort();
   return l.length?hist[l[l.length-1]]:{brl:0,usd:0,milhas:0};
@@ -616,7 +681,8 @@ function atualizarGuia(){
   if(!g||!s||!S.sess)return;
   var n=nucleo(S.sess.n),cot=(S.cfg&&Number(S.cfg.cotacao))||COTACAO_PADRAO,pid=s.value,meta;
   if(pid==="custom")meta=parseNum(document.getElementById("f-custom").value)||plano(n,"inter").usd;else meta=plano(n,pid).usd;
-  g.innerHTML=htmlGuia(n,{brl:parseNum(document.getElementById("f-brl").value),usd:parseNum(document.getElementById("f-usd").value),milhas:parseNum(document.getElementById("f-mil").value)},meta,cot);
+  g.innerHTML=htmlGuia(n,{brl:parseNum(document.getElementById("f-brl").value),usd:parseNum(document.getElementById("f-usd").value),milhas:lerMilhasForm().milhas},meta,cot);
+  var cm=document.getElementById("milhas-calc"),lm=lerMilhasForm();if(cm)cm.innerHTML=htmlCalcMilhas(n,lm.programas,lm.fator,lm.vencimentos);
 }
 function telaEscolha(){
   var h='<section class="bloco">';
@@ -647,7 +713,20 @@ function render(){
     h+='<nav class="abas" aria-label="Seções">'+btAba("painel","🛫","Painel")+btAba("viagem","🗺️","A viagem")+btAba("prep","✅","Preparativos")+btAba("nucleo","💰","Meu núcleo")+'</nav>';
     if(S.toast)h+='<div class="toast" role="status">'+esc(S.toast)+'</div>';
   }
+  /* Mantém o que foi digitado e ainda não salvo quando a tela é redesenhada. */
+  var rascunho={},campos=el.querySelectorAll('input[id^="f-"],select[id^="f-"]'),ci,temR=false;
+  for(ci=0;ci<campos.length;ci++){rascunho[campos[ci].id]=campos[ci].value;temR=true}
   el.innerHTML=h;
+  if(temR){
+    var rk,re,achou=false;
+    for(rk in rascunho){re=document.getElementById(rk);if(re){re.value=rascunho[rk];achou=true}}
+    if(achou){
+      var sp=document.getElementById("f-plano"),wc=document.getElementById("wrap-custom"),cpc=document.getElementById("comp");
+      if(sp&&wc)wc.style.display=sp.value==="custom"?"block":"none";
+      if(sp&&cpc&&S.sess)cpc.innerHTML=htmlComp(nucleo(S.sess.n),sp.value);
+      atualizarGuia();
+    }
+  }
 }
 function btAba(id,ic,t){return '<button data-a="aba" data-id="'+id+'"'+(S.aba===id?' aria-current="page"':"")+'><span class="ic" aria-hidden="true">'+ic+'</span>'+t+'</button>'}
 function digitando(){var a=document.activeElement;return a&&(a.tagName==="INPUT"||a.tagName==="SELECT")}
@@ -720,13 +799,16 @@ function tratarPin(){
 function salvarValores(){
   var n=nucleo(S.sess.n),pub=S.prog[n.id]||{},cot=(S.cfg&&Number(S.cfg.cotacao))||COTACAO_PADRAO;
   var pid=document.getElementById("f-plano").value;
-  var v={brl:parseNum(document.getElementById("f-brl").value),usd:parseNum(document.getElementById("f-usd").value),milhas:Math.round(parseNum(document.getElementById("f-mil").value)),plano:pid,atualizadoEm:Date.now()};
+  var lm=lerMilhasForm();
+  if(lm.erroVenc){S.erro="Informe o vencimento como mês e ano, por exemplo 05/2028.";render();return}
+  if(!lm.fatorOk){S.erro="Informe quantas milhas valem 1.000 pontos do banco, por exemplo 1.000.";render();return}
+  var v={brl:parseNum(document.getElementById("f-brl").value),usd:parseNum(document.getElementById("f-usd").value),milhas:lm.milhas,programas:lm.programas,vencimentos:lm.vencimentos,fator:lm.fator,plano:pid,atualizadoEm:Date.now()};
   var meta;
   if(pid==="custom"){v.metaCustom=Math.round(parseNum(document.getElementById("f-custom").value));if(v.metaCustom<=0){S.erro="Informe a meta em dólares.";render();return}meta=v.metaCustom}
   else{v.metaCustom=0;meta=plano(n,pid).usd}
   /* O mês atual guarda a última atualização; os meses anteriores ficam preservados. */
   v.historico=deepMerge({},(S.priv&&S.priv.historico)||{});
-  v.historico[mesAtual()]={brl:v.brl,usd:v.usd,milhas:v.milhas};
+  v.historico[mesAtual()]={brl:v.brl,usd:v.usd,milhas:v.milhas,latam:lm.programas.latam,smiles:lm.programas.smiles,azul:lm.programas.azul,banco:lm.programas.banco};
   var antes=equivalente(n,S.priv||{},cot).total,eq=equivalente(n,v,cot);
   var meses=(pub.meses||[]).slice(),m=mesAtual();
   if(eq.total>antes&&meses.indexOf(m)<0)meses.push(m);
@@ -758,7 +840,7 @@ document.addEventListener("change",function(ev){
   if(ev.target&&ev.target.id==="f-plano"){var w=document.getElementById("wrap-custom");if(w)w.style.display=ev.target.value==="custom"?"block":"none";var cp=document.getElementById("comp");if(cp&&S.sess)cp.innerHTML=htmlComp(nucleo(S.sess.n),ev.target.value);atualizarGuia()}
 });
 document.addEventListener("input",function(ev){
-  var i=ev.target&&ev.target.id;if(i==="f-brl"||i==="f-usd"||i==="f-mil"||i==="f-custom")atualizarGuia();
+  var i=ev.target&&ev.target.id;if(i==="f-brl"||i==="f-usd"||i==="f-custom"||i==="f-fator"||/^f-[pv]-/.test(i||""))atualizarGuia();
 });
 document.addEventListener("click",function(ev){
   var b=ev.target.closest?ev.target.closest("[data-a]"):null;if(!b)return;
