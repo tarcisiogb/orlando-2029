@@ -28,7 +28,8 @@ service cloud.firestore {
 
     function privadoValido() {
       let d = request.resource.data;
-      return d.keys().hasOnly(['brl', 'usd', 'milhas', 'programas', 'vencimentos', 'fator', 'plano', 'metaCustom', 'historico', 'atualizadoEm'])
+      return d.keys().hasOnly(['brl', 'usd', 'milhas', 'programas', 'vencimentos', 'fator', 'compras', 'plano', 'metaCustom', 'historico', 'atualizadoEm'])
+        && (!d.keys().hasAny(['compras']) || (d.compras is number && d.compras >= 0))
         && (!d.keys().hasAny(['historico']) || d.historico is map)
         && (!d.keys().hasAny(['programas']) || d.programas is map)
         && (!d.keys().hasAny(['vencimentos']) || d.vencimentos is map)

@@ -188,7 +188,7 @@ nav.abas .ic{display:block;font-size:20px;line-height:1.2}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
 <script>
 /* ================= CONFIGURAÇÃO ================= */
-var BUILD = "2026-11-05k";
+var BUILD = "2026-11-05l";
 var FIREBASE_CONFIG = {
   apiKey: "AIzaSyBT5_QhfJwfFpKUbw9e3O7-mtqAl1zicCg",
   authDomain: "orlando-2029.firebaseapp.com",
@@ -242,6 +242,11 @@ function gruposComp(n,pid){
   for(a=0;a<g.length;a++){s=0;var it=[];for(b=0;b<g[a].i.length;b++)if(g[a].i[b].v>0){it.push(g[a].i[b]);s+=g[a].i[b].v}if(s>0)r.push({t:g[a].t,i:it,s:s})}
   return r;
 }
+function comprasAtual(){
+  var e=document.getElementById("f-compras");
+  if(e)return Math.round(parseNum(e.value));
+  return Math.max(0,Number((S.priv||{}).compras)||0);
+}
 function htmlComp(n,pid){
   var ref=pid==="custom",id=ref?"inter":pid,g=gruposComp(n,id),meta=plano(n,id).usd,sub=0,i,j,q=n.pessoas.length;
   for(i=0;i<g.length;i++)sub+=g[i].s;
@@ -253,8 +258,10 @@ function htmlComp(n,pid){
     if(g[i].i.length>1)for(j=0;j<g[i].i.length;j++)h+='<tr class="sub"><td>'+esc(g[i].i[j].n)+'</td>'+(um?"":'<td>'+pp(g[i].i[j].v)+'</td>')+'<td>'+fmt(g[i].i[j].v)+'</td></tr>';
   }
   h+='<tr class="grupo"><th scope="row">Folga para aumento de preços</th>'+(um?"":'<td>'+pp(meta-sub)+'</td>')+'<td>'+fmt(meta-sub)+'</td></tr>';
-  h+='<tr class="total"><th scope="row">Total'+(ref?" da Intermediária":"")+'</th>'+(um?"":'<td>'+pp(meta)+'</td>')+'<td>'+fmt(meta)+'</td></tr></tbody></table>';
-  h+='<p class="nota">Valores em dólares'+(um?"":'. "Por pessoa" é a média: divide o total do núcleo por '+q)+'. Compras não entram na meta: cada núcleo define o próprio orçamento.</p>';
+  var cmp=comprasAtual();
+  if(cmp>0)h+='<tr class="grupo"><th scope="row">Compras (definido por vocês)</th>'+(um?"":'<td>'+pp(cmp)+'</td>')+'<td>'+fmt(cmp)+'</td></tr>';
+  h+='<tr class="total"><th scope="row">Total'+(ref?" com a Intermediária":"")+'</th>'+(um?"":'<td>'+pp(meta+cmp)+'</td>')+'<td>'+fmt(meta+cmp)+'</td></tr></tbody></table>';
+  h+='<p class="nota">Valores em dólares'+(um?"":'. "Por pessoa" é a média: divide o total do núcleo por '+q)+'. Compras só entram se vocês definirem um valor, sem folga.</p>';
   if(ref)h+='<p class="nota">Vocês definiram outro valor. A tabela mostra a Intermediária como referência.</p>';
   if(n.id==="tarcisio")h+='<p class="nota">Inclui Lucas e Clara. O hotel daqui é o quarto de vocês com a Clara; o quarto do Lucas está na meta da Beth.</p>';
   if(n.id==="beth")h+='<p class="nota">O quarto é dividido com o Lucas e está todo nesta meta. Os demais custos do Lucas estão na meta de Tarcísio e Aline.</p>';
@@ -302,7 +309,7 @@ var COMPARA = [
 ];
 var ESCOLHAS = [
   {t:"Hotel na Disney",m:"Dá entrada 30 minutos antes nos parques, reserva antecipada das filas pagas e transporte gratuito. Fica mais fácil voltar ao hotel na pausa da tarde."},
-  {t:"Pacotes iguais para todos",m:"Todos os núcleos têm as mesmas opções, e cada um escolhe a própria meta. Compras ficam fora da meta: cada núcleo define o próprio orçamento."},
+  {t:"Pacotes iguais para todos",m:"Todos os núcleos têm as mesmas opções, e cada um escolhe a própria meta. Compras são opcionais: cada núcleo define o próprio orçamento em Meu núcleo."},
   {t:"Cabana Bay na Universal",m:"Tem muitos quartos conjugados e transporte gratuito até os parques da Universal, além de entrada antecipada."},
   {t:"Quatro quartos",m:"Clara fica com Tarcísio e Aline, Lucas com a Beth, e cada um dos outros casais tem seu quarto. Vamos pedir quartos conjugados, que dependem de disponibilidade."},
   {t:"Dois dias de parque, um de descanso",m:"Nunca há mais de dois dias seguidos de parque. Assim, crianças e adultos chegam inteiros ao fim da viagem."},
@@ -556,7 +563,7 @@ function htmlPacotes(n,ativo){
   h+='</tbody></table><p class="nota">As células em destaque são as que mudam em relação à Intermediária.</p>';
   h+='<div class="ganhos"><div><h3>Na Econômica, vocês abrem mão de</h3><ul><li>Clima e estrutura de um hotel da própria Disney</li><li>Restaurantes sentados: o valor pede refeições rápidas e café da manhã mais simples</li></ul><p class="nota">Ainda a confirmar: se o hotel de Disney Springs dá a reserva antecipada das filas pagas.</p></div>';
   h+='<div><h3>Na Deluxe, vocês ganham</h3><ul><li>Hotel mais sofisticado, a pé de dois parques</li><li>A Stormalong Bay, uma das melhores piscinas da Disney</li></ul></div>';
-  h+='<div><h3>Igual nos três pacotes acima</h3><ul><li>Datas e 8 dias de parque</li><li>Passagens no mesmo valor</li><li>Cabana Bay nas 3 noites da Universal</li><li>Filas pagas nos 5 dias de Disney</li><li>Carrinho da Beth, seguro e documentos</li><li>Compras fora da meta: cada núcleo define o próprio orçamento</li></ul></div></div>';
+  h+='<div><h3>Igual nos três pacotes acima</h3><ul><li>Datas e 8 dias de parque</li><li>Passagens no mesmo valor</li><li>Cabana Bay nas 3 noites da Universal</li><li>Filas pagas nos 5 dias de Disney</li><li>Carrinho da Beth, seguro e documentos</li><li>Compras: cada núcleo define o próprio orçamento, que soma à meta</li></ul></div></div>';
   h+='<h3 class="sub-t">Opções só Disney</h3><p class="nota">Partem da Econômica e deixam de fora Universal, Islands, Epic e SeaWorld.</p>';
   h+='<table class="pacotes dois"><thead><tr><th scope="col"'+(ativo==="disney9"?' class="ativo"':"")+'>9 noites'+(ativo==="disney9"?'<small>sua meta</small>':"")+'</th><th scope="col"'+(ativo==="disney7"?' class="ativo"':"")+'>7 noites'+(ativo==="disney7"?'<small>sua meta</small>':"")+'</th></tr></thead><tbody>';
   h+='<tr><th colspan="2" scope="colgroup">Dias de parque</th></tr><tr><td>5 dias: 4 parques e volta ao Magic Kingdom</td><td>4 dias: Animal Kingdom, Magic Kingdom, Epcot e Hollywood Studios</td></tr>';
@@ -602,10 +609,10 @@ function abaNucleo(){
   if(!S.sess)return telaEscolha();
   var n=nucleo(S.sess.n),v=S.priv||{},pub=S.prog[n.id]||{},cot=(S.cfg&&Number(S.cfg.cotacao))||COTACAO_PADRAO;
   var pl=plano(n,S.plano||v.plano||"inter");
-  var meta=v.plano==="custom"||S.plano==="custom"?Number(v.metaCustom)||pl.usd:pl.usd;
+  var meta=(v.plano==="custom"||S.plano==="custom"?Number(v.metaCustom)||pl.usd:pl.usd)+Math.max(0,Number(v.compras)||0);
   var eq=equivalente(n,v,cot),pct=clampPct(eq.total/meta*100);
   var h='<section class="bloco"><div class="resumo"><div class="nota" style="color:#CDD8EA">'+esc(n.nome)+'</div><div class="gr">'+pct+'%</div><div class="barra"><i style="width:'+pct+'%"></i></div>';
-  h+='<div class="det">'+usd(eq.total)+' de '+usd(meta)+' guardados pelo núcleo'+(n.pessoas.length>1?'<br>Média de '+usd(meta/n.pessoas.length)+' por pessoa':"")+'</div></div>';
+  h+='<div class="det">'+usd(eq.total)+' de '+usd(meta)+' guardados pelo núcleo'+(n.pessoas.length>1?'<br>Média de '+usd(meta/n.pessoas.length)+' por pessoa':"")+(Number(v.compras)>0?'<br>Inclui '+usd(v.compras)+' para compras':"")+'</div></div>';
   h+='<div class="card guia" id="guia">'+htmlGuia(n,v,meta,cot)+'</div>';
   h+='<div class="card"><h2 style="font-size:20px">Quanto vocês já guardaram</h2><p class="nota">Informe o total atual de cada item. Só quem tem o PIN de vocês vê estes valores.</p>';
   h+='<label for="f-brl">Em reais (R$)</label><input id="f-brl" inputmode="decimal" value="'+(v.brl?fmt(v.brl,2):"")+'" placeholder="0,00">';
@@ -616,6 +623,8 @@ function abaNucleo(){
   h+='<option value="custom"'+((S.plano||v.plano)==="custom"?" selected":"")+'>Outro valor</option></select>';
   h+='<div id="wrap-custom" style="display:'+((S.plano||v.plano)==="custom"?"block":"none")+'"><label for="f-custom">Meta em dólares</label><input id="f-custom" inputmode="numeric" value="'+(v.metaCustom?fmt(v.metaCustom):"")+'"></div>';
   h+='<p class="nota">Valores para o núcleo inteiro, sem compras. A meta escolhida não aparece para os outros.</p>';
+  h+='<label for="f-compras">Orçamento de compras do núcleo, em US$ (opcional)</label><input id="f-compras" inputmode="numeric" value="'+(Number(v.compras)>0?fmt(v.compras):"")+'" placeholder="0">';
+  h+='<p class="nota">Vale para a viagem toda e soma à meta escolhida. Só quem tem o PIN de vocês vê este valor.</p>';
   if(S.erro)h+='<div class="erro" role="alert">'+esc(S.erro)+'</div>';
   h+='<button class="btn bloco-w" data-a="salvar"'+(S.ocupado?" disabled":"")+'>'+(S.ocupado?"Salvando…":"Salvar")+'</button></div></section>';
   h+='<section class="bloco"><h2>O que muda entre os pacotes</h2><div class="card" id="pacotes">'+htmlPacotes(n,S.plano||v.plano||"inter")+'</div></section>';
@@ -728,6 +737,8 @@ function atualizarGuia(){
   if(!g||!s||!S.sess)return;
   var n=nucleo(S.sess.n),cot=(S.cfg&&Number(S.cfg.cotacao))||COTACAO_PADRAO,pid=s.value,meta;
   if(pid==="custom")meta=parseNum(document.getElementById("f-custom").value)||plano(n,"inter").usd;else meta=plano(n,pid).usd;
+  meta+=comprasAtual();
+  var ccp=document.getElementById("comp");if(ccp)ccp.innerHTML=htmlComp(n,pid);
   g.innerHTML=htmlGuia(n,{brl:parseNum(document.getElementById("f-brl").value),usd:parseNum(document.getElementById("f-usd").value),milhas:lerMilhasForm().milhas},meta,cot);
   var cm=document.getElementById("milhas-calc"),lm=lerMilhasForm();if(cm)cm.innerHTML=htmlCalcMilhas(n,lm.programas,lm.fator,lm.vencimentos);
 }
@@ -857,10 +868,12 @@ function salvarValores(){
   /* O mês atual guarda a última atualização; os meses anteriores ficam preservados. */
   v.historico=deepMerge({},(S.priv&&S.priv.historico)||{});
   v.historico[mesAtual()]={brl:v.brl,usd:v.usd,milhas:v.milhas,latam:lm.programas.latam,smiles:lm.programas.smiles,azul:lm.programas.azul,banco:lm.programas.banco};
+  v.compras=Math.round(parseNum(document.getElementById("f-compras").value));
+  meta+=v.compras;
   var antes=equivalente(n,S.priv||{},cot).total,eq=equivalente(n,v,cot);
   var meses=(pub.meses||[]).slice(),m=mesAtual();
   if(eq.total>antes&&meses.indexOf(m)<0)meses.push(m);
-  var novo=calcular(n,pub,{pct:eq.total/meta*100,meses:meses,deluxe:eq.total>=planoDeluxe(n).usd,temMilhas:v.milhas>0});
+  var novo=calcular(n,pub,{pct:eq.total/meta*100,meses:meses,deluxe:eq.total>=planoDeluxe(n).usd+v.compras,temMilhas:v.milhas>0});
   var ganhou=[],k;for(k in novo.medalhas)if(!(pub.medalhas||{})[k])ganhou.push(MEDALHAS[k].n);
   S.ocupado=true;S.erro="";render();
   Store.gravarPriv(S.sess.k,v).then(function(){return Store.gravarProg(n.id,novo)}).then(function(){
@@ -872,7 +885,7 @@ function alternarDoc(p,c){
   var n=nucleo(S.sess.n),pub=S.prog[n.id]||{},docs=deepMerge({},pub.docs||{}),cot=(S.cfg&&Number(S.cfg.cotacao))||COTACAO_PADRAO;
   var x=deepMerge({},docs[p]||{});x[c]=!(x[c]===true);docs[p]=x;
   var eq=equivalente(n,S.priv||{},cot);
-  var novo=calcular(n,pub,{pct:pub.pct,docs:docs,deluxe:eq.total>=planoDeluxe(n).usd,temMilhas:Number((S.priv||{}).milhas)>0});
+  var novo=calcular(n,pub,{pct:pub.pct,docs:docs,deluxe:eq.total>=planoDeluxe(n).usd+Math.max(0,Number((S.priv||{}).compras)||0),temMilhas:Number((S.priv||{}).milhas)>0});
   var ganhou=[],k;for(k in novo.medalhas)if(!(pub.medalhas||{})[k])ganhou.push(MEDALHAS[k].n);
   Store.gravarProg(n.id,novo).then(function(){if(ganhou.length){aviso("Nova medalha: "+ganhou.join(", ")+"!");confete()}}).catch(function(e){aviso(erroRede(e))});
 }
@@ -888,7 +901,7 @@ document.addEventListener("change",function(ev){
   if(ev.target&&ev.target.id==="f-plano"){var w=document.getElementById("wrap-custom");if(w)w.style.display=ev.target.value==="custom"?"block":"none";var cp=document.getElementById("comp");if(cp&&S.sess)cp.innerHTML=htmlComp(nucleo(S.sess.n),ev.target.value);var pk=document.getElementById("pacotes");if(pk&&S.sess)pk.innerHTML=htmlPacotes(nucleo(S.sess.n),ev.target.value);atualizarGuia()}
 });
 document.addEventListener("input",function(ev){
-  var i=ev.target&&ev.target.id;if(i==="f-brl"||i==="f-usd"||i==="f-custom"||i==="f-fator"||/^f-[pv]-/.test(i||""))atualizarGuia();
+  var i=ev.target&&ev.target.id;if(i==="f-brl"||i==="f-usd"||i==="f-custom"||i==="f-fator"||i==="f-compras"||/^f-[pv]-/.test(i||""))atualizarGuia();
 });
 document.addEventListener("click",function(ev){
   var b=ev.target.closest?ev.target.closest("[data-a]"):null;if(!b)return;
